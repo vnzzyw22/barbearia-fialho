@@ -1,17 +1,38 @@
 import type { Metadata } from "next";
-import { Familjen_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Bevan, Familjen_Grotesk, JetBrains_Mono, Rye } from "next/font/google";
 import "./globals.css";
 import { RouteTransition } from "@/components/site/route-transition";
 
-// Fonte de display (ver ANEXO seção 3): serifada forte de peso editorial —
-// headlines, números de seção, wordmark da Hero. Fraunces tem esse caráter
-// "clássico com atitude" sem competir com o logo real (ainda não recebido,
-// ver CLAUDE.md > Pendências).
-const fraunces = Fraunces({
+// Fonte de display (revisado 2026-09-15 — trocada a pedido da cliente,
+// a Fraunces serifada não conversava com a logo real, que combina
+// script ornamentado + slab pesada estilo cartaz antigo): Bevan, mesmo
+// peso "cartaz de velho oeste" do "BARBEARIA" da logo. Testada contra
+// Alfa Slab One antes de decidir — Alfa Slab One tem um defeito real de
+// renderização em letras maiúsculas acentuadas (Á/Ã/Ç ficam com uma
+// franja/ghosting visível, confirmado por screenshot comparando as
+// duas), inaceitável num site 100% em português. Bevan só existe no
+// peso 400 (sem negrito de verdade) — `font-synthesis: none` em
+// globals.css evita negrito falso sintetizado pelo navegador nos vários
+// `font-black`/`font-bold` já usados junto de `font-display` no código.
+const bevan = Bevan({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
+  weight: "400",
   style: ["normal", "italic"],
+});
+
+// Fonte de eyebrow/label decorativo (2026-09-15) — só pro único texto
+// realmente "eyebrow" isolado do site (o "Maringá — PR" da Hero, ver
+// hero.tsx). NÃO usada em --font-label (que continua JetBrains Mono):
+// --font-label serve preço/duração/dados do painel admin/CTAs, onde uma
+// fonte decorativa estilo placa prejudicaria legibilidade de dados reais.
+// Rye escolhida sobre Sancreek por legibilidade ligeiramente melhor no
+// tamanho real de uso (12px, tracking largo) — ambas testadas antes de
+// decidir.
+const rye = Rye({
+  variable: "--font-eyebrow",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 // Texto corrido + navbar: grotesk neutra com personalidade, não Inter (pedido
@@ -44,7 +65,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${fraunces.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${bevan.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} ${rye.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a

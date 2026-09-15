@@ -127,9 +127,12 @@ export function Hero({ business }: HeroProps) {
         animate="show"
         className="relative z-20 mx-auto flex min-h-[86svh] max-w-4xl flex-col items-center px-6 pt-16 pb-14 text-center sm:pt-20"
       >
+        {/* Único "eyebrow" isolado do site de verdade (ver layout.tsx) —
+            por isso usa font-eyebrow (Rye) em vez de font-label
+            (JetBrains Mono, reservado a dados factuais/CTAs). */}
         <motion.p
           variants={blurIn}
-          className="font-label text-xs tracking-[0.35em] text-brand-cream/70 uppercase"
+          className="font-eyebrow text-xs tracking-[0.35em] text-brand-cream/70 uppercase"
         >
           Maringá — PR
         </motion.p>

@@ -38,12 +38,17 @@
   --font-display: var(--font-display);
   --font-nav: var(--font-body);
   --font-label: var(--font-label);
+  --font-eyebrow: var(--font-eyebrow);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  /* Bevan/Rye (ver layout.tsx) só existem no peso 400 — sem isso o
+     navegador sintetiza negrito falso (borrado/desigual em fontes slab)
+     nos vários font-black/font-bold aplicados junto de font-display. */
+  font-synthesis: none;
 }
 
 /* Trava de segurança contra scroll horizontal — herdada do template
