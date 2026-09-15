@@ -82,6 +82,22 @@ Tesouras Club Barbearia) e valem pra qualquer clone deste template:
   `#b08d57` + texto preto tem 6.1:1, então a convenção herdada
   (`bg-brand-red` sempre com `text-brand-black`) continuou válida sem
   precisar trocar nenhum lugar do código.
+- **Middleware rodando em cima de arquivo estático grande (vídeo):**
+  achado em 2026-09-15 — o `matcher` do `proxy.ts` já excluía
+  `imagens/`/extensões de imagem do middleware, mas `videos/`/`.mp4` não
+  estavam na lista. Resultado: cada requisição de pedaço do vídeo (`Range
+  request`, é assim que o navegador carrega/dá seek num `<video>`) passava
+  pelo middleware e disparava uma chamada de autenticação ao Supabase por
+  pedaço. Sem Supabase configurado (modo de pré-visualização local) isso
+  não trava, porque o middleware sai cedo — foi só aparecer na Vercel, com
+  Supabase real configurado, que o vídeo da Hero parou de carregar (o
+  cliente reportou "vídeo não aparece", igual já tinha acontecido antes
+  com vídeo/imagem em outro deployment deste template). Corrigido
+  excluindo `videos/` e `.mp4`/`.webm`/`.mov` do matcher, mesmo padrão já
+  usado pra imagens. **Lição geral: qualquer pasta nova de asset estático
+  em `public/` precisa entrar na exclusão do matcher do proxy, não só
+  imagens** — checar isso de cara na próxima vez que surgir uma pasta de
+  mídia nova.
 - **`prefers-reduced-motion`:** ao contrário do Lkas Locs/Tesouras Club
   (que tinham decorações puramente ambientais ignorando essa preferência de
   propósito, ex.: selo giratório), aqui a decisão foi inversa — ver
@@ -111,8 +127,10 @@ interativo no navegador)
   `SUPABASE_SERVICE_ROLE_KEY`.
 - [ ] Criar usuário admin (Authentication → Add user) — sugestão:
   `vbcs2009@gmail.com` (mesmo e-mail usado no Tesouras Club), a confirmar.
-- [ ] Criar projeto Vercel, importar o repositório, configurar as mesmas
-  env vars do Supabase.
+- [x] **Projeto Vercel criado e no ar** (2026-09-15) — a cliente confirmou.
+  Não sei se as env vars do Supabase foram configuradas lá (perguntar se
+  o Supabase real já está ligado em produção ou se o site ainda roda no
+  modo de pré-visualização também na Vercel).
 
 ### Modo de pré-visualização sem Supabase (2026-09-15)
 A cliente perguntou se o Supabase é necessário agora — não é, pro que dá
