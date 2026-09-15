@@ -61,7 +61,15 @@ export function Hero({ business }: HeroProps) {
   return (
     <section
       id="topo"
-      className="relative overflow-x-hidden bg-brand-ink pt-16 text-brand-cream"
+      // `isolate` é essencial aqui: sem um contexto de empilhamento próprio,
+      // o filho `-z-10` abaixo escapa pro contexto de um ancestral externo
+      // e é pintado ANTES do próprio bg-brand-ink desta section — ou seja,
+      // o fundo sólido da section cobre o vídeo/poster por completo, sempre
+      // (causa real do "vídeo preto" em produção, 2026-09-15: confirmado
+      // com amostragem de pixel do screenshot, que batia exatamente com
+      // #121110 em toda a área da Hero, e reproduzido/revertido ao vivo
+      // isolando o z-index desta camada).
+      className="relative isolate overflow-x-hidden bg-brand-ink pt-16 text-brand-cream"
     >
       <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-ink">
         {/* Camada de base: SEMPRE renderizada, sem relação nenhuma com o
