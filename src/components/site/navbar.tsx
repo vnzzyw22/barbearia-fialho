@@ -25,7 +25,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-ink/75 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-ink/35 shadow-lg shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <Link href="#topo" className="flex items-center gap-2.5">
           <Image
@@ -74,7 +74,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="flex flex-col gap-1 border-t border-white/10 bg-brand-ink px-6 py-3 text-brand-smoke md:hidden">
+        <div className="flex flex-col gap-1 border-t border-white/10 bg-brand-ink/60 px-6 py-3 text-brand-smoke backdrop-blur-xl backdrop-saturate-150 md:hidden">
           {links.map((link) => (
             <a
               key={link.href}
