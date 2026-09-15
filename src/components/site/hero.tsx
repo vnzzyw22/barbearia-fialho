@@ -4,11 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { EASE } from "@/lib/motion";
-import type { BusinessSettings } from "@/lib/supabase/types";
-
-interface HeroProps {
-  business: BusinessSettings | null;
-}
 
 const container = {
   hidden: {},
@@ -47,7 +42,21 @@ const POSTER_SRC = "/videos/hero/hero-poster.jpg";
 // telas largas ainda fica bem enquadrado.
 const HERO_VIDEO_SRC = "/videos/hero/hero-background.mp4";
 
-export function Hero({ business }: HeroProps) {
+// Selo da marca (2026-09-15, pedido explícito da cliente) — substitui o
+// headline em texto (H1 "Fialho"/"Barbearia" + tagline + endereço,
+// removidos da Hero por pedido dela: "títulos e informações" tornavam a
+// Hero poluída). Arquivo original (`fialho-logo-borda-branca.jpg`,
+// entregue pela cliente) veio com fundo em xadrez (JPG sem alpha real,
+// não PNG) e uma marca d'água do Gemini no canto — corrigido nesta
+// sessão (ver scripts/fix-logo-transparency.mjs): transparência
+// recuperada + marca d'água apagada. O traço original ficou num tom
+// escuro/dourado, invisível sobre o fundo escuro da Hero — recolorido
+// pro branco/creme da marca a partir da mesma máscara de alpha (mesmo
+// contorno entregue pela cliente, só a cor mudou — nada de desenho
+// novo).
+const LOGO_SEAL_SRC = "/imagens/fialho-logo-branca.png";
+
+export function Hero() {
   // useReducedMotion() retorna `null` no primeiro render (servidor e
   // primeiro paint no cliente, antes do próprio hook resolver via
   // matchMedia) — `!reduceMotion` trata `null` como "mostra vídeo", e o
@@ -127,41 +136,28 @@ export function Hero({ business }: HeroProps) {
         animate="show"
         className="relative z-20 mx-auto flex min-h-[86svh] max-w-4xl flex-col items-center px-6 pt-16 pb-14 text-center sm:pt-20"
       >
-        {/* Único "eyebrow" isolado do site de verdade (ver layout.tsx) —
-            por isso usa font-eyebrow (Rye) em vez de font-label
-            (JetBrains Mono, reservado a dados factuais/CTAs). */}
-        <motion.p
-          variants={blurIn}
-          className="font-eyebrow text-xs tracking-[0.35em] text-brand-cream/70 uppercase"
-        >
-          Maringá — PR
-        </motion.p>
-
-        <motion.h1
-          variants={blurIn}
-          className="mt-6 font-display leading-[0.88] font-black tracking-tight uppercase"
-          style={{ fontSize: "clamp(3rem, 13vw, 8rem)" }}
-        >
-          <span className="block text-brand-cream">Fialho</span>
-          <span className="mt-1 block text-brand-red">Barbearia</span>
-        </motion.h1>
-
-        {/* Tagline real da marca (ver ANEXO seção 1) — dado confirmado, não
-            placeholder, por isso hardcoded aqui como o resto da identidade
-            fixa (não é algo editável pelo painel). */}
-        <motion.p
-          variants={blurIn}
-          className="mt-5 max-w-md font-display text-lg font-medium text-brand-cream/90 italic sm:text-xl"
-        >
-          &ldquo;Cabelo, barba e bigode como tem que ser!&rdquo;
-        </motion.p>
-
-        <motion.p
-          variants={blurIn}
-          className="mt-4 font-label text-xs tracking-widest text-brand-cream/60 uppercase"
-        >
-          {business?.address ?? "Avenida Brasil, 4493 — Maringá, PR"}
-        </motion.p>
+        {/* Selo da marca substitui o headline em texto (ver LOGO_SEAL_SRC
+            acima pro histórico). h1 mantido pra SEO/acessibilidade — texto
+            real, só visualmente escondido, já que o selo não é
+            confiável como texto alternativo sozinho. */}
+        <motion.div variants={blurIn} className="w-56 sm:w-72 md:w-80">
+          <h1 className="sr-only">Fialho Barbearia</h1>
+          {/* unoptimized: o otimizador de imagem do Next (sharp, PNG
+              qualidade<100) quantiza pra paleta indexada — em uma imagem
+              com gradiente de alpha fino (contorno fino sobre
+              transparência), isso gera dithering que aparece como um
+              xadrez visível sobre o vídeo. PNG já é leve (~300KB, usado
+              uma única vez), sem necessidade real de otimização. */}
+          <Image
+            src={LOGO_SEAL_SRC}
+            alt="Fialho Barbearia"
+            width={1024}
+            height={1024}
+            priority
+            unoptimized
+            className="h-auto w-full"
+          />
+        </motion.div>
 
         <motion.div
           variants={blurIn}

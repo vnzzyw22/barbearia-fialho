@@ -31,7 +31,7 @@ export default async function Home() {
           transição entre seções principais — mesma assinatura visual usada,
           em maior escala, na troca de rota (route-transition.tsx). */}
       <main id="conteudo" className="flex flex-1 flex-col">
-        <Hero business={business} />
+        <Hero />
         <div aria-hidden="true" className="signature-divider" />
         <AboutSection staffCount={staff.length} servicesCount={services.length} />
         <div aria-hidden="true" className="signature-divider" />
