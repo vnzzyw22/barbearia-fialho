@@ -109,10 +109,5 @@ create policy staff_storage_admin_delete
   to authenticated
   using (bucket_id = 'staff');
 
--- Seed placeholder óbvio (ver ANEXO seção 1: "não inventar nomes... registros
--- vazios ou com placeholder óbvio tipo 'Profissional 1'") — a Fialho não
--- passou nomes/quantidade real da equipe ainda. Trocar pelos profissionais
--- reais pelo painel (Equipe) assim que possível.
-insert into public.staff (name, role, display_order) values
-  ('Profissional 1', 'Barbeiro', 1),
-  ('Profissional 2', 'Barbeiro', 2);
+-- Seed da equipe real está em supabase/seed.sql (recebida em 2026-09-15) —
+-- não duplicar aqui. Esta migration só cria a estrutura (tabela/RLS/bucket).

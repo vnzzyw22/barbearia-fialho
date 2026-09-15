@@ -1,5 +1,6 @@
 "use server";
 
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import {
   getActiveServiceById,
@@ -84,6 +85,18 @@ type CreateAppointmentResult =
 export async function createAppointment(
   input: CreateAppointmentInput,
 ): Promise<CreateAppointmentResult> {
+  // Modo de pré-visualização sem Supabase (ver src/lib/supabase/config.ts):
+  // os dados de leitura (serviços/equipe/horário) já funcionam com o
+  // fallback real, mas gravar um agendamento de verdade exige banco — erro
+  // claro em vez de deixar `createClient()` lançar exceção sem contexto.
+  if (!isSupabaseConfigured) {
+    return {
+      ok: false,
+      error:
+        "Agendamento ainda não disponível: o projeto Supabase da Fialho ainda não foi criado.",
+    };
+  }
+
   const name = input.name.trim();
   const whatsapp = input.whatsapp.trim();
   const notes = input.notes?.trim() || undefined;

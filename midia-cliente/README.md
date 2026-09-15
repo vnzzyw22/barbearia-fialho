@@ -6,10 +6,11 @@ no lugar certo do projeto (ver ANEXO seções 2 e 4). Nada aqui é servido
 pelo site diretamente.
 
 - `midia-cliente/hero/` — exportação bruta do Reel do Instagram
-  (@fialhobarbearia_) que vai virar o vídeo de fundo da Hero. A partir
-  daqui eu recorto (desktop + mobile), comprimo (H.264, ~3-4MB) e aplico o
-  grading da marca, deixando o resultado em `public/videos/hero/` (ver
-  README lá).
+  (@fialhobarbearia_) que vira o vídeo de fundo da Hero. A partir daqui eu
+  recorto (desktop + mobile), comprimo (H.264, ~3-4MB) e extraio o poster,
+  deixando o resultado em `public/videos/hero/` (ver README lá). **Já
+  recebido e processado em 2026-09-14** (`fundo-hero-raw.mp4`) — mais
+  vídeos/reels que cheguem depois seguem o mesmo fluxo.
 - `midia-cliente/galeria/` — fotos reais de portfólio para a Galeria. A
   partir daqui eu faço o upload pelo painel administrativo (Supabase
   Storage, `/admin/galeria`) — ou insiro diretamente se o projeto Supabase

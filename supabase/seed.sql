@@ -6,25 +6,44 @@ values (
   '5544998092162',
   'fialhobarbearia_',
   'Avenida Brasil, 4493 — Maringá, PR',
-  -- Horário de funcionamento NÃO informado pela cliente — deixado vazio de
-  -- propósito (ver ANEXO seção 1: "não inventar"). Preencher pelo painel em
-  -- Configurações assim que a Fialho confirmar. Enquanto vazio, o bloco
-  -- "Horário de funcionamento" simplesmente não aparece no site
-  -- (ver formatBusinessHours em src/lib/business-hours.ts).
-  '{}'::jsonb
+  -- Horário real (passado pela cliente em 2026-09-15). Domingo não foi
+  -- mencionado — tratado como fechado (nenhuma barbearia da faixa citou
+  -- domingo, e não dá pra assumir "aberto" sem confirmação).
+  '{
+    "mon": {"open": "09:00", "close": "19:30"},
+    "tue": {"open": "09:00", "close": "19:30"},
+    "wed": {"open": "09:00", "close": "19:30"},
+    "thu": {"open": "09:00", "close": "19:30"},
+    "fri": {"open": "09:00", "close": "19:30"},
+    "sat": {"open": "08:00", "close": "14:00"},
+    "sun": {"closed": true}
+  }'::jsonb
 );
 
--- Preços/durações abaixo são EXEMPLO — pesquisa de mercado de barbearias em
--- Maringá/PR, não são os preços reais da Fialho (ver ANEXO seção 1). 100%
--- editável depois pelo painel administrativo (Serviços). Confirmar com a
--- cliente antes de publicar.
-insert into public.services (name, price, duration_minutes, display_order) values
-  ('Corte',                          50.00,  45, 1),
-  ('Barba',                          40.00,  30, 2),
-  ('Corte + Barba',                  85.00,  70, 3),
-  ('Corte degradê',                  60.00,  50, 4),
-  ('Sobrancelha',                    20.00,  15, 5),
-  ('Corte + Barba + Sobrancelha',   100.00,  90, 6);
+-- Serviços reais (passados pela cliente em 2026-09-15, direto do sistema de
+-- agendamento que ela já usa) — não são mais exemplo de mercado. Os 3
+-- serviços "Clube Fialho" (cadastro de clube/assinatura, preço R$ 0,00 na
+-- lista original) foram deixados de fora a pedido explícito da cliente
+-- ("esses clube não coloca").
+insert into public.services (name, description, price, duration_minutes, display_order) values
+  ('Cabelo',               null,             65.00,  45, 1),
+  ('Barba',                null,             60.00,  45, 2),
+  ('Cabelo e Barba',       null,            110.00,  75, 3),
+  ('Sobrancelhas',         null,             20.00,  15, 4),
+  ('Depilação de Nariz',   null,             25.00,  15, 5),
+  ('Depilação de Orelha',  null,             25.00,  15, 6),
+  ('Selagem Capilar',      null,            150.00,  90, 7),
+  ('Tintura',              'A partir de',     50.00,  30, 8);
+
+-- Equipe real (passada pela cliente em 2026-09-15) — sem foto ainda
+-- ("depois vou adicionar fotos deles"). Sem função/especialidade
+-- individual informada, por isso "Barbeiro" genérico pra todos.
+insert into public.staff (name, role, display_order) values
+  ('Allyson',     'Barbeiro', 1),
+  ('Elano',       'Barbeiro', 2),
+  ('Gótico',      'Barbeiro', 3),
+  ('Jean',        'Barbeiro', 4),
+  ('John Fialho', 'Barbeiro', 5);
 
 -- Fotos REAIS da Fialho (recebidas em 2026-09-14, direto na pasta do
 -- projeto — ver public/imagens/galeria/). Servidas como arquivo estático

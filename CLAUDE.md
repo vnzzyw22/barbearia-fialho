@@ -7,8 +7,10 @@ Site + agendamento + painel administrativo para a **Fialho Barbearia**
 construído originalmente para o **Lkas Locs** e reaproveitado pelo
 **Tesouras Club Barbearia** — código clonado localmente a partir do
 Tesouras Club (`Projects/Tesouras-Club-Barbearia`) em 2026-09-14 (robocopy
-+ `git init` novo, histórico de commits não herdado). Nenhum projeto
-Supabase/GitHub/Vercel próprio criado ainda.
++ `git init` novo, histórico de commits não herdado). Repositório GitHub
+próprio conectado (`github.com/vnzzyw22/barbearia-fialho.git`) — projeto
+Supabase adiado a pedido da cliente (ver Pendências), Vercel ainda não
+criado.
 
 ## Decisões confirmadas
 
@@ -93,9 +95,14 @@ Tesouras Club Barbearia) e valem pra qualquer clone deste template:
 
 ### Infraestrutura (manual, fora do alcance do agente — requer login
 interativo no navegador)
-- [ ] Criar projeto Supabase próprio da Fialho (conta a definir — ver nota
-  sobre limite de 2 projetos gratuitos por pessoa/organização, registrada
-  no histórico do Tesouras Club).
+- [x] **Repositório GitHub conectado** (2026-09-15):
+  `github.com/vnzzyw22/barbearia-fialho.git`, branch `main`.
+- [ ] Criar projeto Supabase próprio da Fialho — **adiado a pedido da
+  cliente** (2026-09-15), não é bloqueante pro trabalho de design/conteúdo.
+  Ver "Modo de pré-visualização sem Supabase" abaixo pro que já funciona
+  sem ele. Quando for criar: conta a definir (ver nota sobre limite de 2
+  projetos gratuitos por pessoa/organização, registrada no histórico do
+  Tesouras Club).
 - [ ] Aplicar `supabase/migrations/*.sql` + `supabase/seed.sql` (via SQL
   Editor do painel ou `supabase db push`, dependendo do que o login do CLI
   permitir).
@@ -104,10 +111,25 @@ interativo no navegador)
   `SUPABASE_SERVICE_ROLE_KEY`.
 - [ ] Criar usuário admin (Authentication → Add user) — sugestão:
   `vbcs2009@gmail.com` (mesmo e-mail usado no Tesouras Club), a confirmar.
-- [ ] Criar repositório GitHub próprio (ex.: `fialho-barbearia`) e
-  configurar como remote deste repo local.
 - [ ] Criar projeto Vercel, importar o repositório, configurar as mesmas
   env vars do Supabase.
+
+### Modo de pré-visualização sem Supabase (2026-09-15)
+A cliente perguntou se o Supabase é necessário agora — não é, pro que dá
+pra ver/ajustar hoje. Implementado `src/lib/supabase/config.ts`
+(`isSupabaseConfigured`) + `src/lib/local-fallback-data.ts`: quando não há
+`NEXT_PUBLIC_SUPABASE_URL`/`ANON_KEY` no ambiente, `proxy.ts` deixa de
+checar sessão (sem isso toda rota dava 500) e as leituras públicas
+(`queries.ts`) retornam os dados REAIS já recebidos (horário, serviços,
+equipe, galeria — espelhados de `supabase/seed.sql`) em vez de erro/vazio.
+Resultado: `npm run dev` mostra a Home e o `/agendar` funcionando de
+verdade — inclusive o cálculo de horários disponíveis, que usa o horário
+real —, só não grava agendamento nenhum (`createAppointment` retorna erro
+claro nesse modo). `/admin` continua quebrado sem Supabase (login/leitura/
+escrita real não tem como funcionar sem banco) — não tentei fingir isso.
+**Manter `local-fallback-data.ts` sincronizado manualmente com
+`seed.sql`** sempre que um dado real mudar (não há fonte única automática
+entre os dois).
 
 ### Mídia real (ver ANEXO seções 2 e 4 — entrega obrigatória, não opcional)
 - [x] **3 fotos reais recebidas em 2026-09-14** — a cliente colocou os
@@ -125,14 +147,22 @@ interativo no navegador)
   (`midia-cliente/galeria/` → processo → `public/imagens/galeria/` →
   linha em `gallery_photos`), completando aos poucos os 3 slots que ainda
   usam Unsplash (Ferramentas/Ambiente/Fachada, ver seed.sql).
-- [ ] Vídeo de fundo da Hero — ainda não chegou (fonte prevista: Reels do
-  Instagram @fialhobarbearia_). Entregar exportação bruta em
-  `midia-cliente/hero/`; processamento (recorte mobile/desktop, compressão
-  H.264 ~3-4MB, grading, poster) fica a cargo do agente — ver
-  `public/videos/hero/README.md`. Até lá, a Hero usa a foto real
-  `fialho-barbeiro-sobrancelha.jpg` acima como poster (muito melhor que o
-  banco de imagens de estoque que eu tinha usado antes dessas 3 fotos
-  chegarem).
+- [x] **Vídeo de fundo da Hero recebido e processado em 2026-09-14**
+  (`fundo-hero-raw.mp4`, exportação de Reel, direto na pasta do projeto) —
+  barbeiro trabalhando com navalha reta junto ao rosto do cliente, ótimo
+  match com o "objeto-herói" do ANEXO. Processado com ffmpeg (instalado via
+  `winget install Gyan.FFmpeg` nesta sessão — não estava disponível antes)
+  em `hero-mobile.mp4` (recorte vertical original recomprimido),
+  `hero-desktop.mp4` (**ver ressalva abaixo**) e `hero-poster.jpg` (frame
+  em 6s). Ver `public/videos/hero/README.md` pro detalhamento e os comandos
+  exatos usados.
+  - **Ressalva sobre o desktop:** a fonte é só vertical (Reel), sem nenhum
+    plano panorâmico disponível — não existe um "recorte mais amplo" de
+    verdade pra tirar dali. `hero-desktop.mp4` usa o próprio vídeo
+    desfocado/escurecido como fundo 16:9, com o vídeo nítido centralizado
+    por cima. Funciona bem visualmente, mas não é literalmente o que o
+    ANEXO pediu ("crop mais panorâmico") — se a Fialho gravar/mandar um
+    plano horizontal de verdade no futuro, vale reprocessar a partir dele.
 - [x] **Logo real recebida em 2026-09-14** — `public/imagens/fialho-logo.jpg`,
   selo circular preto/creme/cobre (bate quase exatamente com a paleta já
   escolhida a partir do ANEXO, nenhum ajuste de cor precisou ser feito). Em
@@ -148,18 +178,25 @@ interativo no navegador)
   assumi nada disso no código sem confirmação.
 
 ### Conteúdo — dados que o ANEXO pede explicitamente pra não inventar
-- [ ] Nomes/fotos/funções reais da equipe — seed hoje é
-  `Profissional 1`/`Profissional 2` (placeholder óbvio, ver
-  `supabase/migrations/20260910120000_staff.sql`), não nomes inventados.
-- [ ] Horário de funcionamento — `business_settings.business_hours` está
-  `{}` (vazio) de propósito; o bloco correspondente simplesmente não
-  aparece no site até ser preenchido pelo painel (Configurações).
+- [x] **Nomes reais da equipe recebidos em 2026-09-15**: Allyson, Elano,
+  Gótico, Jean, John Fialho — sem foto ainda ("depois vou adicionar fotos
+  deles", cliente) e sem função/especialidade individual (todos com role
+  genérico "Barbeiro"). Seed em `supabase/seed.sql` e
+  `local-fallback-data.ts`; migration `20260910120000_staff.sql` não seeda
+  mais nada (evita duplicar com o seed).
+- [x] **Horário real recebido em 2026-09-15**: seg-sex 09:00-19:30, sáb
+  08:00-14:00, domingo fechado (não mencionado pela cliente — tratado como
+  fechado, não como "aberto" por omissão).
+- [x] **Preços/durações reais recebidos em 2026-09-15** — direto do sistema
+  de agendamento que a cliente já usa, não é mais exemplo de mercado: 8
+  serviços (Cabelo, Barba, Cabelo e Barba, Sobrancelhas, Depilação de
+  Nariz, Depilação de Orelha, Selagem Capilar, Tintura "a partir de"). Os 3
+  serviços "Clube Fialho" (R$ 0,00 na lista original — parecem ser
+  cadastro de clube/assinatura, não serviço avulso) ficaram de fora a
+  pedido explícito da cliente.
+- [ ] Fotos da equipe — pendente, cliente já avisou que vem depois.
 - [ ] Depoimentos — nenhuma seção de depoimentos existe no site (o template
   nunca teve uma; não foi adicionada aqui sem conteúdo real pra preencher).
-- [x] Preço/duração dos 6 serviços iniciais — **exemplo de mercado**
-  (Maringá/PR), marcado como tal em comentário no seed, não os preços reais
-  da Fialho — confirmar antes de publicar (ver ANEXO seção 1 e
-  `supabase/seed.sql`).
 - [ ] Copy da seção "Sobre" e as 6 perguntas do FAQ — placeholder curto e
   neutro (não inventei uma "história da marca" convincente sem ter
   informação real — ver TODOs em about-section.tsx/faq-accordion.tsx).

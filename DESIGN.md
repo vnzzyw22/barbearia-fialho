@@ -118,11 +118,23 @@ em cobre — mesma assinatura visual da moldura da Galeria) e como favicon
 do corpo de texto (regra do ANEXO) — só a Fraunces (display) reproduz um
 pouco do caráter editorial da logo sem tentar imitar o flourish.
 
+## Vídeo real da Hero (recebido e processado em 2026-09-14)
+
+Barbeiro trabalhando com navalha reta junto ao rosto do cliente — ver
+`public/videos/hero/README.md` pro detalhamento técnico (poster, recortes
+mobile/desktop, ressalva sobre o desktop não ter fonte panorâmica de
+verdade ainda). 3 fotos reais + logo real também já chegaram e substituíram
+o banco de imagens de estoque como poster da Hero e em metade da Galeria
+(ver CLAUDE.md > Pendências).
+
 ## Pendente (bloqueado na cliente ou fora do escopo desta sessão)
 
-- Vídeo real da Hero — ver `midia-cliente/README.md`. 3 fotos reais já
-  chegaram (2026-09-14, ver CLAUDE.md > Pendências) e já substituíram o
-  banco de imagens de estoque como poster da Hero e em metade da Galeria.
+- Plano horizontal/panorâmico de verdade pra Hero desktop (hoje usa um
+  tratamento de fundo desfocado a partir do vídeo vertical, ver
+  `public/videos/hero/README.md`).
+- Fotos da equipe (nomes já recebidos, fotos "vêm depois").
+- Mais fotos de portfólio — Galeria ainda completa 3 dos 6 slots com banco
+  de imagens temporário.
 - Nomes/fotos reais da equipe, horário de funcionamento real, depoimentos —
   ver CLAUDE.md > Pendências (dados que o ANEXO explicitamente pede pra não
   inventar).

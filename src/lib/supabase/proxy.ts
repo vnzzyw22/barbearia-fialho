@@ -1,7 +1,17 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isSupabaseConfigured } from "./config";
 
 export async function updateSession(request: NextRequest) {
+  // Sem Supabase configurado ainda (ver CLAUDE.md > Pendências): deixa
+  // passar sem checar sessão, só pra permitir pré-visualizar o site
+  // público localmente antes do projeto Supabase existir. Nenhuma rota
+  // /admin funciona de verdade sem banco (login, leitura, escrita — tudo
+  // depende dele), então "acesso liberado" aqui não expõe nada real.
+  if (!isSupabaseConfigured) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(

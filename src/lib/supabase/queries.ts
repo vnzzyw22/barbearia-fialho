@@ -1,11 +1,28 @@
 import type { BusyRange } from "@/lib/scheduling";
+import {
+  FALLBACK_BUSINESS,
+  FALLBACK_GALLERY,
+  FALLBACK_SERVICES,
+  FALLBACK_STAFF,
+} from "@/lib/local-fallback-data";
+import { isSupabaseConfigured } from "./config";
 import { createClient } from "./server";
 import type { BusinessSettings, GalleryPhoto, Service, Staff } from "./types";
 
 // Leituras públicas do site (RLS: anon só vê o que é destinado ao público).
 // Usadas em Server Components — sem cache manual, o Next já cuida do request.
+//
+// Cada função de listagem/detalhe abaixo usa os dados reais espelhados em
+// local-fallback-data.ts cedo quando não há Supabase configurado (ver
+// ./config e CLAUDE.md > Pendências), em vez de deixar `createClient()`
+// lançar erro por URL/chave ausentes — assim dá pra pré-visualizar o site
+// público com conteúdo real antes do projeto Supabase existir.
+// `getBusySlots` é exceção: sempre retorna vazio nesse modo (nunca inventa
+// disponibilidade), e o agendamento em si (`createAppointment`) continua
+// exigindo Supabase de verdade — ver src/app/agendar/actions.ts.
 
 export async function getBusinessSettings(): Promise<BusinessSettings | null> {
+  if (!isSupabaseConfigured) return FALLBACK_BUSINESS;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("business_settings")
@@ -21,6 +38,7 @@ export async function getBusinessSettings(): Promise<BusinessSettings | null> {
 }
 
 export async function getActiveServices(): Promise<Service[]> {
+  if (!isSupabaseConfigured) return FALLBACK_SERVICES;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("services")
@@ -39,6 +57,9 @@ export async function getActiveServices(): Promise<Service[]> {
 export async function getActiveServiceById(
   id: string,
 ): Promise<Service | null> {
+  if (!isSupabaseConfigured) {
+    return FALLBACK_SERVICES.find((service) => service.id === id) ?? null;
+  }
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("services")
@@ -65,6 +86,7 @@ export async function getBusySlots(
   fromISO: string,
   toISO: string,
 ): Promise<BusyRange[]> {
+  if (!isSupabaseConfigured) return [];
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("busy_slots")
@@ -82,6 +104,7 @@ export async function getBusySlots(
 }
 
 export async function getActiveStaff(): Promise<Staff[]> {
+  if (!isSupabaseConfigured) return FALLBACK_STAFF;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("staff")
@@ -98,6 +121,9 @@ export async function getActiveStaff(): Promise<Staff[]> {
 }
 
 export async function getActiveStaffById(id: string): Promise<Staff | null> {
+  if (!isSupabaseConfigured) {
+    return FALLBACK_STAFF.find((person) => person.id === id) ?? null;
+  }
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("staff")
@@ -119,6 +145,7 @@ export async function getActiveStaffById(id: string): Promise<Staff | null> {
 // pra categoria "hero", manter o toggle no admin só ia confundir (foto
 // marcada "Principal" não apareceria em lugar nenhum).
 export async function getPublicGalleryPhotos(): Promise<GalleryPhoto[]> {
+  if (!isSupabaseConfigured) return FALLBACK_GALLERY;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("gallery_photos")

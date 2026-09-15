@@ -28,20 +28,19 @@ const blurIn = {
   },
 };
 
-// Foto real da Fialho (recebida em 2026-09-14, ver public/imagens/galeria/)
-// usada como poster/fallback até o vídeo real da Hero chegar — barbeiro
-// aparando sobrancelha com o neon "Clube Fialho" da própria loja ao fundo,
-// bem mais forte que qualquer banco de imagens de estoque (ver ANEXO seção
-// 2 — banco de imagens era só "enquanto os arquivos reais não chegam").
-const POSTER_SRC = "/imagens/galeria/fialho-barbeiro-sobrancelha.jpg";
+// Poster real (2026-09-14, ver public/videos/hero/README.md) — frame
+// extraído do próprio vídeo da Hero (barbeiro com a navalha reta junto ao
+// rosto do cliente, o "objeto-herói" pedido no ANEXO seção 3), não mais
+// foto de banco/galeria como fallback provisório.
+const POSTER_SRC = "/videos/hero/hero-poster.jpg";
 
-// Vídeo de fundo (ver ANEXO seção 4) — requisito confirmado da entrega
-// final, não um "extra". Dois arquivos (não um redimensionado): recorte
-// vertical pro mobile, panorâmico pro desktop, cada um com seu <source> —
-// o navegador escolhe via media query no próprio <source>. Enquanto os
-// arquivos reais não chegam (ver public/videos/hero/README.md), essas
-// fontes simplesmente não resolvem e o <video> exibe só o `poster` acima
-// sem quebrar layout nem mostrar ícone de erro.
+// Vídeo de fundo (ver ANEXO seção 4) — dois arquivos reais processados a
+// partir da exportação bruta do Reel (@fialhobarbearia_, recebida em
+// 2026-09-14): mobile é o recorte vertical original, só recomprimido;
+// desktop precisou de um tratamento diferente (ver
+// public/videos/hero/README.md — fonte é só vertical, sem plano panorâmico
+// disponível ainda) — fundo desfocado/escurecido do próprio vídeo
+// preenchendo 16:9, com o vídeo nítido centralizado por cima.
 const VIDEO_SOURCES = {
   mobile: "/videos/hero/hero-mobile.mp4",
   desktop: "/videos/hero/hero-desktop.mp4",

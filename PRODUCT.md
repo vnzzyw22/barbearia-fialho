@@ -60,17 +60,19 @@ não é um mesmo visual reaproveitado.
 
 - Stack já definida (não greenfield, herdada do Lkas Locs via Tesouras Club):
   Next.js 16 (App Router, TypeScript) + Tailwind CSS v4 + Supabase
-  (Postgres/Auth/Storage) + Vercel. Projeto Supabase próprio, repositório
-  GitHub e projeto Vercel ainda não criados (ver CLAUDE.md > Pendências —
-  são passos manuais/interativos, fora do alcance do agente).
-- Preço e duração dos 6 serviços iniciais (Corte, Barba, Corte + Barba,
-  Corte degradê, Sobrancelha, Corte + Barba + Sobrancelha) são EXEMPLO —
-  pesquisa de mercado de barbearias em Maringá/PR, não os preços reais da
-  Fialho (ver ANEXO seção 1) — 100% editáveis pelo painel, nunca hardcoded.
-- Vários profissionais por deployment (a Fialho confirmou ter mais de um
-  barbeiro atendendo, mas não nomes/quantidade exata) — cada um tem a
-  própria agenda; agendamento exige escolher um. Seed hoje: 2 placeholders
-  óbvios ("Profissional 1"/"2"), não nomes inventados.
+  (Postgres/Auth/Storage) + Vercel. Repositório GitHub próprio conectado
+  (`github.com/vnzzyw22/barbearia-fialho.git`); projeto Supabase adiado a
+  pedido da cliente (2026-09-15) e projeto Vercel ainda não criado — o
+  site roda em modo de pré-visualização sem Supabase enquanto isso (ver
+  CLAUDE.md > "Modo de pré-visualização sem Supabase").
+- Preço e duração dos 8 serviços (Cabelo, Barba, Cabelo e Barba,
+  Sobrancelhas, Depilação de Nariz, Depilação de Orelha, Selagem Capilar,
+  Tintura) são dados REAIS, recebidos da cliente em 2026-09-15 — não mais
+  exemplo de mercado. 100% editáveis pelo painel, nunca hardcoded.
+- Vários profissionais por deployment — nomes reais recebidos em
+  2026-09-15 (Allyson, Elano, Gótico, Jean, John Fialho), cada um com a
+  própria agenda; agendamento exige escolher um. Ainda sem foto/função
+  individual (cliente avisou que fotos vêm depois).
 - Fuso fixo `America/Sao_Paulo` (sem horário de verão no Brasil desde 2019).
 
 ## Brand Commitments
@@ -85,28 +87,27 @@ Dados confirmados pela cliente (ANEXO específico do projeto, 2026-09-14) —
 - Paleta: preto quente `#121110` + cobre/latão fosco `#b08d57` + branco
   quebrado `#ede6dc`. Tipografia: Fraunces (display) + Familjen Grotesk
   (corpo/nav). Ver DESIGN.md pro detalhamento completo.
-- Vídeo de fundo na Hero é requisito confirmado da entrega final (fonte:
-  Reels do Instagram @fialhobarbearia_), não um "extra" condicional — ver
-  ANEXO seção 4 e `public/videos/hero/README.md`.
-- Fotos reais da galeria também são entrega obrigatória, ainda não
-  recebidas — ver `midia-cliente/README.md`.
-- Logo real e 3 fotos de portfólio já recebidas (2026-09-14) e em uso no
-  site — ver CLAUDE.md > Pendências. Ainda pendente/bloqueado na cliente:
-  vídeo da Hero, nomes/fotos da equipe, horário de funcionamento real,
-  depoimentos, preços/durações reais dos serviços (os 6 do seed são só
-  faixa de mercado, marcados como exemplo). Ver lista completa em
-  CLAUDE.md > Pendências.
+- Vídeo de fundo na Hero, logo real, 3 fotos de portfólio, horário de
+  funcionamento, preços/durações reais e nomes da equipe já recebidos
+  (2026-09-14/15) e em uso no site — ver CLAUDE.md > Pendências. O recorte
+  desktop do vídeo usa um tratamento de fundo desfocado por enquanto (a
+  fonte recebida é só vertical, sem plano panorâmico disponível ainda).
+  Ainda pendente/bloqueado na cliente: fotos da equipe, depoimentos, mais
+  fotos de portfólio (a Galeria ainda completa 3 dos 6 slots com banco de
+  imagens temporário).
 
 ## Evidence on Hand
 
 - Schema de dados herdado do template (`business_settings`, `services`,
   `staff`, `clients`, `appointments`, `blocked_slots`, `gallery_photos`,
   `transactions`, com RLS por tabela) — migrations ainda não aplicadas em
-  nenhum projeto Supabase real (nenhum projeto Supabase da Fialho existe
-  ainda, ver CLAUDE.md > Pendências).
-- 3 fotos reais da Fialho recebidas em 2026-09-14 (ver
-  `public/imagens/galeria/` e CLAUDE.md > Pendências) — já em uso na
-  Galeria e como poster/fallback da Hero. Vídeo real da Hero e logo real
+  nenhum projeto Supabase real (adiado a pedido da cliente, ver CLAUDE.md >
+  Pendências); os mesmos dados reais já existem em `supabase/seed.sql` e
+  espelhados em `src/lib/local-fallback-data.ts` pro modo de
+  pré-visualização sem banco.
+- Logo real, 3 fotos de portfólio, horário, serviços e nomes da equipe
+  recebidos em 2026-09-14/15 (ver `public/imagens/` e CLAUDE.md >
+  Pendências) — já em uso no site. Vídeo real da Hero e fotos da equipe
   ainda não chegaram; Galeria ainda completa 3 dos 6 slots com banco de
   imagens temporário (Unsplash, tratado com o duotone da marca).
 
