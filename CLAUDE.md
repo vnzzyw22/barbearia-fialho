@@ -132,6 +132,30 @@ interativo no navegador)
   o Supabase real já está ligado em produção ou se o site ainda roda no
   modo de pré-visualização também na Vercel).
 
+### Vídeo da Hero ainda não aparece pra cliente (em aberto, 2026-09-15)
+Depois de duas rodadas de investigação (fix do matcher do proxy, camada de
+poster independente do `<video>`) e testes reais com Chromium/Playwright
+(local e produção) confirmando que o vídeo decodifica e toca normalmente
+nos dois ambientes, **a cliente reportou que continua não aparecendo pra
+ela**. Ou seja: o servidor está certo, o vídeo funciona num Chromium
+automatizado de verdade — mas não no navegador real dela. Combina com o
+mesmo padrão já visto no Lkas Locs (ver CLAUDE.md daquele projeto): um bug
+que só reproduz no ambiente real do cliente, nunca em teste automatizado.
+Retomar amanhã por aqui, nesta ordem (ver runbook salvo na memória):
+- [ ] Confirmar se ela testou em aba anônima, sem cache, depois do último
+  deploy (commit `8ce5cf8`) — metade dos "ainda quebrado" some nisso.
+- [ ] Pedir print/gravação de tela do Hero dela (não só "não aparece") —
+  fica preto? Mostra a foto parada? Fica em branco?
+- [ ] Pedir o Console do DevTools dela (F12), com foco em erros
+  mencionando video/media/autoplay/CSP.
+- [ ] Confirmar navegador + dispositivo exatos dela (nunca perguntado
+  ainda) — desktop/mobile, Chrome/Safari/Edge, Windows/Android/iOS.
+- [ ] Confirmar se "reduzir animação" está ativado no sistema dela (pedido
+  2x, sem resposta ainda).
+Se nada disso apontar a causa, considerar pedir uma gravação de tela
+curta do navegador dela carregando o site, em vez de tentar reproduzir
+remotamente de novo.
+
 ### Modo de pré-visualização sem Supabase (2026-09-15)
 A cliente perguntou se o Supabase é necessário agora — não é, pro que dá
 pra ver/ajustar hoje. Implementado `src/lib/supabase/config.ts`
