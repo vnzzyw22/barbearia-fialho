@@ -112,23 +112,14 @@ export function Hero({ business }: HeroProps) {
           Maringá — PR
         </motion.p>
 
-        {/* Hierarquia tipográfica ecoa a logo real (ver ANEXO/DESIGN.md):
-            "Fialho" em script grande (Berkshire Swash) + "Barbearia" bem
-            menor, espaçada, em serifada — igual à proporção entre as duas
-            linhas de letreiro da logo, não um wordmark de tamanho único. */}
         <motion.h1
           variants={blurIn}
-          className="mt-6 font-script leading-[0.8] text-brand-cream"
-          style={{ fontSize: "clamp(3.5rem, 15vw, 9rem)" }}
+          className="mt-6 font-display leading-[0.88] font-black tracking-tight uppercase"
+          style={{ fontSize: "clamp(3rem, 13vw, 8rem)" }}
         >
-          Fialho
+          <span className="block text-brand-cream">Fialho</span>
+          <span className="mt-1 block text-brand-red">Barbearia</span>
         </motion.h1>
-        <motion.p
-          variants={blurIn}
-          className="mt-1 font-display text-lg font-semibold tracking-[0.3em] text-brand-red uppercase sm:text-xl"
-        >
-          Barbearia
-        </motion.p>
 
         {/* Tagline real da marca (ver ANEXO seção 1) — dado confirmado, não
             placeholder, por isso hardcoded aqui como o resto da identidade

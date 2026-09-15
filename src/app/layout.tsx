@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
-import { Berkshire_Swash, Familjen_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Familjen_Grotesk, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { RouteTransition } from "@/components/site/route-transition";
 
-// Fonte de destaque (2026-09-15) — logo real recebida (ver
-// public/imagens/fialho-logo.jpg): "FIALHO" em script/flourish vintage.
-// Berkshire Swash é a aproximação mais próxima disso disponível no Google
-// Fonts (swash bold, clima de selo/tatuagem vintage) — usada só nos
-// wordmarks/títulos grandes (Hero, título de cada seção), nunca em texto
-// menor/denso (nome de serviço no card, preço, pergunta do FAQ etc. — ali
-// ilegível em script). Continua valendo a regra do ANEXO seção 3: "não usar
-// a fonte script do logo em corpo de texto, só em elementos pontuais de
-// marca" — só que agora com uma fonte de verdade em vez de placeholder.
-const berkshireSwash = Berkshire_Swash({
-  variable: "--font-script",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-// Fonte de display secundária: serifada, ecoa o "BARBEARIA" em caixa-alta
-// pequena da logo — usada em títulos menores, nome de serviço/profissional,
-// preço etc., onde o script ficaria ilegível.
+// Fonte de display (ver ANEXO seção 3): serifada forte de peso editorial —
+// headlines, números de seção, wordmark da Hero. Fraunces tem esse caráter
+// "clássico com atitude" sem competir com o logo real (ainda não recebido,
+// ver CLAUDE.md > Pendências).
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
@@ -58,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${berkshireSwash.variable} ${fraunces.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a

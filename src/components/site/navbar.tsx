@@ -35,11 +35,8 @@ export function Navbar() {
             height={36}
             className="rounded-full ring-1 ring-brand-red/40"
           />
-          <span className="flex items-baseline gap-1.5">
-            <span className="font-script text-xl text-brand-cream normal-case">Fialho</span>
-            <span className="font-display text-[11px] font-bold tracking-widest text-brand-red uppercase">
-              Barbearia
-            </span>
+          <span className="font-display text-sm font-bold tracking-wide text-brand-cream uppercase">
+            Fialho <span className="text-brand-red">Barbearia</span>
           </span>
         </Link>
 

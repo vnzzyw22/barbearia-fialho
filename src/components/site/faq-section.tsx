@@ -12,7 +12,7 @@ export function FaqSection() {
           <div className="flex flex-col items-start gap-4 text-left">
             <h2 className="font-display text-4xl leading-none font-bold tracking-tight uppercase sm:text-5xl lg:text-6xl">
               <span className="text-brand-cream">Perguntas</span>{" "}
-              <span className="font-script text-brand-red normal-case">Frequentes</span>
+              <span className="text-brand-red">Frequentes</span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />
             <p className="max-w-md text-brand-smoke">

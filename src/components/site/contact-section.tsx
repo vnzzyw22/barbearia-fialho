@@ -32,7 +32,7 @@ export function ContactSection({ business }: ContactSectionProps) {
     <section id="contato" className="bg-brand-ink">
       <div className="mx-auto grid max-w-5xl gap-10 px-6 py-14 sm:grid-cols-2 sm:py-24">
       <Reveal>
-        <h2 className="font-script text-4xl text-brand-cream sm:text-5xl">
+        <h2 className="font-display text-2xl font-bold text-brand-cream sm:text-3xl">
           Contato
         </h2>
 

@@ -43,7 +43,7 @@ export function AboutSection({ staffCount, servicesCount }: AboutSectionProps) {
             >
               Sobre a
             </span>
-            <span className="block font-script text-brand-red normal-case">Fialho</span>
+            <span className="block text-brand-red">Fialho</span>
           </h2>
           <span aria-hidden="true" className="block h-px w-16 bg-brand-red/60" />
         </Reveal>
