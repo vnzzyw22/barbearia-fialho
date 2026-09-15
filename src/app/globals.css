@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Identidade da Fialho Barbearia (ver ANEXO seção 3, 2026-09-14):
+     preto quente + cobre/latão fosco + branco quebrado — deliberadamente
+     fora do clichê "preto + dourado brilhante" do nicho. Nomes de variável
+     herdados do template (brand-red/ink/cream/etc.) mantidos de propósito
+     — só os VALORES mudaram — pra não precisar tocar em toda classe
+     Tailwind `text-brand-red`/`bg-brand-ink`/etc. espalhada pelo código. */
+  --color-brand-red: #b08d57; /* cobre/latão fosco — único acento da marca */
+  --color-brand-black: #121110; /* preto quente (fundo base) */
+  --color-brand-ink: #121110; /* preto quente (fundo base da Hero) */
+  --color-brand-cream: #ede6dc; /* branco quebrado/pergaminho — nunca branco puro */
+  --color-brand-oxblood: #2a2117; /* cobre bem escuro — glow ambiente atrás da Hero */
+  --color-brand-smoke: #a79a87; /* bege acinzentado quente — texto secundário */
+  --color-brand-paper: #121110; /* mesmo preto base — site dark-only, sem seções claras */
+
+  /* Curva de easing única do site (ver ANEXO seção 5) — suave na saída,
+     sem bounce, sem linear. Usada em Framer Motion (`ease: EASE`, ver
+     src/lib/motion.ts) e, aqui, em qualquer transição CSS pura. */
+  --ease-signature: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-red: var(--color-brand-red);
+  --color-brand-black: var(--color-brand-black);
+  --color-brand-ink: var(--color-brand-ink);
+  --color-brand-cream: var(--color-brand-cream);
+  --color-brand-oxblood: var(--color-brand-oxblood);
+  --color-brand-smoke: var(--color-brand-smoke);
+  --color-brand-paper: var(--color-brand-paper);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-nav: var(--font-body);
+  --font-label: var(--font-label);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+/* Trava de segurança contra scroll horizontal — herdada do template
+   original (algum elemento decorativo vazando ~18px além da viewport em
+   telas médias já causou isso antes). box-sizing: border-box já vem do
+   preflight do Tailwind (@import "tailwindcss" acima). */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Corrige o popup nativo de <select> no admin: o `[color-scheme:dark]` do
+   fieldClass (theme.ts) nem sempre é respeitado pelo navegador na lista de
+   opções (só no campo fechado) -- resultado é texto claro sobre fundo
+   branco padrão do SO nas opções abertas. Só o admin usa <select> nativo
+   (o site público usa dropdown custom em booking-form.tsx), então é seguro
+   estilizar globalmente. Cor de fundo igual ao cardClass (#1a1a1a). */
+select option {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+/* Assinatura visual da marca (ver ANEXO seção 3, item 1): linha diagonal
+   fina em cobre, referência abstrata ao poste de barbeiro sem ser literal.
+   Usada como divisor de seção (.signature-divider) e, com mais peso, como
+   a varredura de transição entre páginas (ver src/components/site/
+   route-transition.tsx). Definida aqui como classe utilitária pura porque
+   é puramente decorativa/estática — não depende de estado React. */
+.signature-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-brand-red) 50%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  transform: skewY(-1deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
