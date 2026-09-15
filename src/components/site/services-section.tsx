@@ -37,7 +37,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
               >
                 Nossos
               </span>{" "}
-              <span className="text-brand-red">Serviços</span>
+              <span className="font-script text-brand-red normal-case">Serviços</span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />
           </div>

@@ -36,6 +36,7 @@
   --color-brand-paper: var(--color-brand-paper);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-script: var(--font-script);
   --font-nav: var(--font-body);
   --font-label: var(--font-label);
 }

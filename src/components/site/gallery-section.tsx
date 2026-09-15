@@ -19,7 +19,7 @@ export function GallerySection({ photos }: GallerySectionProps) {
               >
                 Nossa
               </span>{" "}
-              <span className="text-brand-red">Galeria</span>
+              <span className="font-script text-brand-red normal-case">Galeria</span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />
           </div>

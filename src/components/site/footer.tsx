@@ -53,8 +53,11 @@ export function Footer({ business, services }: FooterProps) {
               height={40}
               className="rounded-full ring-1 ring-brand-red/40"
             />
-            <span className="font-display text-base font-bold tracking-wide text-brand-cream uppercase">
-              Fialho <span className="text-brand-red">Barbearia</span>
+            <span className="flex items-baseline gap-1.5">
+              <span className="font-script text-2xl text-brand-cream normal-case">Fialho</span>
+              <span className="font-display text-xs font-bold tracking-widest text-brand-red uppercase">
+                Barbearia
+              </span>
             </span>
           </Link>
           <p className="max-w-xs text-sm text-brand-smoke">

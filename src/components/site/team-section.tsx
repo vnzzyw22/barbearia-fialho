@@ -22,7 +22,7 @@ export function TeamSection({ staff }: TeamSectionProps) {
               >
                 Nossa
               </span>{" "}
-              <span className="text-brand-red">Equipe</span>
+              <span className="font-script text-brand-red normal-case">Equipe</span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />
           </div>

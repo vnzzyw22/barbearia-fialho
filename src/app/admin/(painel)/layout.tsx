@@ -23,8 +23,11 @@ export default async function PainelLayout({
     <div className="flex min-h-full flex-1 flex-col bg-brand-ink md:flex-row">
       <aside className="flex shrink-0 flex-col border-b border-white/10 bg-[#0f0f0f] md:w-56 md:border-b-0 md:border-r">
         <div className="px-4 py-4">
-          <span className="font-display text-lg font-bold text-white">
-            Fialho <span className="text-brand-red">Barbearia</span>
+          <span className="flex items-baseline gap-1.5">
+            <span className="font-script text-2xl text-white">Fialho</span>
+            <span className="font-display text-[10px] font-bold tracking-widest text-brand-red uppercase">
+              Barbearia
+            </span>
           </span>
         </div>
         <AdminNav />
