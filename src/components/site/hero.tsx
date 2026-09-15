@@ -65,13 +65,8 @@ export function Hero({ business }: HeroProps) {
     >
       <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-ink">
         {/* Camada de base: SEMPRE renderizada, sem relação nenhuma com o
-            estado do <video> (não é o atributo `poster`, que é interno ao
-            elemento de vídeo e pode sofrer o mesmo tipo de falha de
-            composição que o vídeo). Puro <Image>, visível via CSS puro,
-            sem depender de onLoadedData/onCanPlay/play() resolver — se o
-            autoplay for bloqueado (silencioso, sem erro no console) ou o
-            vídeo falhar por qualquer motivo, esta camada garante que nunca
-            fica preto. */}
+            estado do <video>. Puro <Image>, visível via CSS puro, sem
+            depender de onLoadedData/onCanPlay/play() resolver. */}
         <Image
           src={POSTER_SRC}
           alt=""
@@ -81,10 +76,23 @@ export function Hero({ business }: HeroProps) {
           className="object-cover"
           style={{ filter: "saturate(0.85) contrast(0.94) brightness(0.62)" }}
         />
+        {/* 2026-09-15: causa real do "vídeo preto" reportado pela cliente
+            em produção — sem o atributo `poster`, o navegador pinta o
+            <video> como um retângulo preto opaco sempre que ainda não
+            decodificou nenhum frame (autoplay adiado silenciosamente por
+            economia de dados/bateria no aparelho real dela, sem disparar
+            erro nenhum). Esse preto fica por cima da camada de <Image>
+            acima, escondendo-a, porque o <video> vem depois no DOM. O
+            atributo `poster` resolve isso na própria pintura do elemento —
+            é só uma imagem, pintada imediatamente e substituída assim que o
+            primeiro frame real do vídeo começa a tocar, sem depender de
+            nenhum callback JS (ao contrário do vídeo em si). */}
         {showVideo && (
           <video
             className="hero-zoom absolute inset-0 h-full w-full object-cover"
             style={{ filter: "saturate(0.85) contrast(0.94) brightness(0.62)" }}
+            poster={POSTER_SRC}
+            preload="auto"
             autoPlay
             muted
             loop
