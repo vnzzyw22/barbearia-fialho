@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
-import { Bevan, Familjen_Grotesk, JetBrains_Mono, Rye } from "next/font/google";
+import { Familjen_Grotesk, JetBrains_Mono, Oswald, Rye } from "next/font/google";
 import "./globals.css";
 import { RouteTransition } from "@/components/site/route-transition";
 
-// Fonte de display (revisado 2026-09-15 — trocada a pedido da cliente,
-// a Fraunces serifada não conversava com a logo real, que combina
-// script ornamentado + slab pesada estilo cartaz antigo): Bevan, mesmo
-// peso "cartaz de velho oeste" do "BARBEARIA" da logo. Testada contra
-// Alfa Slab One antes de decidir — Alfa Slab One tem um defeito real de
-// renderização em letras maiúsculas acentuadas (Á/Ã/Ç ficam com uma
-// franja/ghosting visível, confirmado por screenshot comparando as
-// duas), inaceitável num site 100% em português. Bevan só existe no
-// peso 400 (sem negrito de verdade) — `font-synthesis: none` em
-// globals.css evita negrito falso sintetizado pelo navegador nos vários
-// `font-black`/`font-bold` já usados junto de `font-display` no código.
-const bevan = Bevan({
+// Fonte de display (revisado 2026-09-15 novamente — pedido da cliente
+// inspirado numa referência de barbearia "clássica, premium e imponente":
+// condensada, extra-negrito, caixa-alta, aplicada no restante do site —
+// a Hero em si ficou só com o selo da logo, sem headline em texto, então
+// esta fonte não precisa mais conversar com o traço vintage da logo como
+// a Bevan precisava). Testada Oswald vs Antonio com acentos em PT-BR
+// antes de decidir — as duas renderizam limpo (nenhuma tem o defeito que
+// a Alfa Slab One teve). Oswald escolhida por ser mais consolidada/
+// testada e ter um peso mais "clássico" que a Antonio, mais "esportiva".
+// NENHUMA das duas tem itálico de verdade no Google Fonts (`styles:
+// ["normal"]` nos metadados do next/font) — ver `font-synthesis: style`
+// em globals.css pro itálico sintético do único uso real (about-section
+// tagline).
+const oswald = Oswald({
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  // `latin-ext`, não só `latin`: a Oswald separa caracteres estendidos
+  // (Ç, entre outros) nesse subset — sem ele o Ç renderiza sem cedilha
+  // (vira "C" puro), achado ao revisar o screenshot de "SERVIÇOS"
+  // ampliado (nunca confiar só na leitura visual normal pra isso).
+  subsets: ["latin", "latin-ext"],
+  weight: ["500", "600", "700"],
 });
 
 // Fonte de eyebrow/label decorativo (2026-09-15) — só pro único texto
@@ -31,7 +36,10 @@ const bevan = Bevan({
 // decidir.
 const rye = Rye({
   variable: "--font-eyebrow",
-  subsets: ["latin"],
+  // latin-ext incluído por precaução (ver comentário da Oswald acima —
+  // mesmo risco de caractere acentuado faltando existe em qualquer fonte
+  // do Google Fonts que separe os dois subsets).
+  subsets: ["latin", "latin-ext"],
   weight: "400",
 });
 
@@ -42,7 +50,7 @@ const rye = Rye({
 // pra não introduzir uma terceira família só pro menu.
 const familjenGrotesk = Familjen_Grotesk({
   variable: "--font-body",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
 });
 
@@ -51,7 +59,7 @@ const familjenGrotesk = Familjen_Grotesk({
 // serifada de display nem com o corpo de texto.
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-label",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500"],
 });
 
@@ -65,7 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${bevan.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} ${rye.variable} h-full antialiased`}
+      className={`${oswald.variable} ${familjenGrotesk.variable} ${jetbrainsMono.variable} ${rye.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <a

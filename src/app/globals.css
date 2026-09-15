@@ -45,10 +45,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
-  /* Bevan/Rye (ver layout.tsx) só existem no peso 400 — sem isso o
-     navegador sintetiza negrito falso (borrado/desigual em fontes slab)
-     nos vários font-black/font-bold aplicados junto de font-display. */
-  font-synthesis: none;
+  /* `style` (não `none`): Oswald/Rye (ver layout.tsx) não cobrem todo
+     peso/itálico usado no código (`font-black`/900 sem face 900 real,
+     itálico do about-section sem itálico real em nenhuma das duas) —
+     bloquear synthesis de PESO evita negrito falso borrado em cima de
+     uma fonte condensada já pesada, mas permitir synthesis de ESTILO
+     deixa o único itálico real do site (tagline do about-section)
+     funcionar via itálico sintético (aceitável numa grotesca
+     condensada, ao contrário de uma serifada). */
+  font-synthesis: style;
 }
 
 /* Trava de segurança contra scroll horizontal — herdada do template
