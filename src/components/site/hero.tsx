@@ -64,29 +64,35 @@ export function Hero({ business }: HeroProps) {
       className="relative overflow-x-hidden bg-brand-ink pt-16 text-brand-cream"
     >
       <div className="absolute inset-0 -z-10 overflow-hidden bg-brand-ink">
-        {showVideo ? (
+        {/* Camada de base: SEMPRE renderizada, sem relação nenhuma com o
+            estado do <video> (não é o atributo `poster`, que é interno ao
+            elemento de vídeo e pode sofrer o mesmo tipo de falha de
+            composição que o vídeo). Puro <Image>, visível via CSS puro,
+            sem depender de onLoadedData/onCanPlay/play() resolver — se o
+            autoplay for bloqueado (silencioso, sem erro no console) ou o
+            vídeo falhar por qualquer motivo, esta camada garante que nunca
+            fica preto. */}
+        <Image
+          src={POSTER_SRC}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ filter: "saturate(0.85) contrast(0.94) brightness(0.62)" }}
+        />
+        {showVideo && (
           <video
-            className="hero-zoom h-full w-full object-cover"
+            className="hero-zoom absolute inset-0 h-full w-full object-cover"
             style={{ filter: "saturate(0.85) contrast(0.94) brightness(0.62)" }}
             autoPlay
             muted
             loop
             playsInline
-            poster={POSTER_SRC}
           >
             <source src={VIDEO_SOURCES.mobile} media="(max-width: 767px)" type="video/mp4" />
             <source src={VIDEO_SOURCES.desktop} type="video/mp4" />
           </video>
-        ) : (
-          <Image
-            src={POSTER_SRC}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-            style={{ filter: "saturate(0.85) contrast(0.94) brightness(0.62)" }}
-          />
         )}
         {/* Vinheta pra garantir contraste do texto sobre qualquer frame do
             vídeo/poster — mais escura embaixo, onde ficam CTAs/indicador. */}
