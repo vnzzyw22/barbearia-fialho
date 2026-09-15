@@ -34,17 +34,18 @@ const blurIn = {
 // foto de banco/galeria como fallback provisório.
 const POSTER_SRC = "/videos/hero/hero-poster.jpg";
 
-// Vídeo de fundo (ver ANEXO seção 4) — dois arquivos reais processados a
-// partir da exportação bruta do Reel (@fialhobarbearia_, recebida em
-// 2026-09-14): mobile é o recorte vertical original, só recomprimido;
-// desktop precisou de um tratamento diferente (ver
-// public/videos/hero/README.md — fonte é só vertical, sem plano panorâmico
-// disponível ainda) — fundo desfocado/escurecido do próprio vídeo
-// preenchendo 16:9, com o vídeo nítido centralizado por cima.
-const VIDEO_SOURCES = {
-  mobile: "/videos/hero/hero-mobile.mp4",
-  desktop: "/videos/hero/hero-desktop.mp4",
-};
+// Vídeo de fundo (ver ANEXO seção 4) — recorte vertical original do Reel
+// (@fialhobarbearia_, recebido em 2026-09-14), só recomprimido, usado em
+// QUALQUER largura de tela. Nada de composição/pillarbox pra desktop
+// (v1/v2, removidas em 2026-09-15 a pedido da cliente — o "fundo
+// desfocado preenchendo 16:9" lia como vídeo vertical disfarçado, não
+// como widescreen de verdade): `object-cover` no <video> cobre 100% da
+// Hero em qualquer resolução sem distorcer a proporção, cortando o topo/
+// base em telas largas (a largura vira a dimensão limitante) — o próprio
+// material já é filmado em closes bem enquadrados (ver
+// public/videos/hero/README.md), então esse corte mais agressivo em
+// telas largas ainda fica bem enquadrado.
+const HERO_VIDEO_SRC = "/videos/hero/hero-background.mp4";
 
 export function Hero({ business }: HeroProps) {
   // useReducedMotion() retorna `null` no primeiro render (servidor e
@@ -106,8 +107,7 @@ export function Hero({ business }: HeroProps) {
             loop
             playsInline
           >
-            <source src={VIDEO_SOURCES.mobile} media="(max-width: 767px)" type="video/mp4" />
-            <source src={VIDEO_SOURCES.desktop} type="video/mp4" />
+            <source src={HERO_VIDEO_SRC} type="video/mp4" />
           </video>
         )}
         {/* Vinheta pra garantir contraste do texto sobre qualquer frame do
