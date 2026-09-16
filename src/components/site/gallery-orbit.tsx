@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { EASE } from "@/lib/motion";
 import type { GalleryPhoto } from "@/lib/supabase/types";
@@ -10,11 +10,7 @@ interface GalleryOrbitProps {
   photos: GalleryPhoto[];
 }
 
-const AUTOPLAY_MS = 4200;
-
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
+const AUTOPLAY_MS = 2200;
 
 // Distância circular com sinal: negativo = à esquerda do item ativo,
 // positivo = à direita, sempre pelo caminho mais curto ao redor do
@@ -91,9 +87,8 @@ export function GalleryOrbit({ photos }: GalleryOrbitProps) {
     return () => clearInterval(id);
   }, [reduceMotion, canNavigate, total, previewIndex]);
 
-  const orbitTransition = { duration: reduceMotion ? 0.15 : 0.85, ease: EASE };
-  const previewTransition = { duration: reduceMotion ? 0.12 : 0.45, ease: EASE };
-  const displayPhoto = photos[previewIndex ?? active];
+  const orbitTransition = { duration: reduceMotion ? 0.15 : 0.6, ease: EASE };
+  const previewTransition = { duration: reduceMotion ? 0.12 : 0.4, ease: EASE };
 
   return (
     <div className="mt-12 sm:mt-16">
@@ -181,24 +176,6 @@ export function GalleryOrbit({ photos }: GalleryOrbitProps) {
             );
           })}
         </div>
-      </div>
-
-      <div aria-hidden="true" className="mt-8 flex flex-col items-center gap-1 text-center">
-        <span className="font-label text-[11px] tabular-nums tracking-widest text-brand-smoke">
-          {pad((previewIndex ?? active) + 1)} / {pad(total)}
-        </span>
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={displayPhoto.id}
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduceMotion ? 0 : -6 }}
-            transition={{ duration: 0.3, ease: EASE }}
-            className="font-label text-xs font-medium tracking-[0.2em] text-brand-cream uppercase"
-          >
-            {displayPhoto.category ?? "Fialho Barbearia"}
-          </motion.span>
-        </AnimatePresence>
       </div>
     </div>
   );
