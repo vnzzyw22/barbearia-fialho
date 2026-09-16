@@ -279,10 +279,10 @@ contínuo + blur-in na Hero, scroll reveal ajustado (16px/stagger ~60ms,
 
 **Não implementado ainda** (mudança estrutural maior, não só estilo — ver
 DESIGN.md > Pendente):
-- [ ] Galeria como shared-element transition (miniatura crescendo até tela
-  cheia com a moldura acompanhando) — hoje a Galeria é um carrossel de uma
-  foto por vez (`gallery-carousel.tsx`), não uma grade de miniaturas com
-  lightbox. Precisa de um redesenho da seção, não só CSS/motion.
+- [x] **Galeria redesenhada em 2026-09-16** — não como shared-element
+  literal, mas como órbita 3D (`gallery-orbit.tsx`) com giro automático
+  contínuo e preview em destaque (fundo desfocado) ao passar mouse/dedo/
+  foco sobre qualquer foto. Substituiu o carrossel de uma-foto-por-vez.
 - [ ] Passos do agendamento deslizando horizontalmente com barra de
   progresso — hoje `booking-form.tsx` revela campos progressivamente num
   formulário contínuo, não em steps discretos com transição de slide.
