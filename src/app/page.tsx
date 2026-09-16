@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/footer";
 import { GallerySection } from "@/components/site/gallery-section";
 import { Hero } from "@/components/site/hero";
 import { Navbar } from "@/components/site/navbar";
+import { PremiumClubSection } from "@/components/site/premium-club-section";
 import { ServicesSection } from "@/components/site/services-section";
 import { TeamSection } from "@/components/site/team-section";
 import {
@@ -34,6 +35,9 @@ export default async function Home() {
         <Hero />
         <div aria-hidden="true" className="signature-divider" />
         <ServicesSection services={services} />
+        <div aria-hidden="true" className="signature-divider" />
+        <PremiumClubSection />
+        <div aria-hidden="true" className="signature-divider" />
         <TeamSection staff={staff} />
         <div aria-hidden="true" className="signature-divider" />
         <GallerySection photos={galleryPhotos} />

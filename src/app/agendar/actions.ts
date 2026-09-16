@@ -14,20 +14,12 @@ import {
   weekdayKeyFor,
 } from "@/lib/scheduling";
 import { buildBookingMessage, getWhatsappLink } from "@/lib/whatsapp";
-
-const MAX_DAYS_AHEAD = 60;
-
-function isValidFutureDate(dateISO: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) return false;
-
-  const today = new Date();
-  const min = new Date(today.toDateString());
-  const max = new Date(min);
-  max.setDate(max.getDate() + MAX_DAYS_AHEAD);
-
-  const date = new Date(`${dateISO}T00:00:00`);
-  return date >= min && date <= max;
-}
+import {
+  isValidFutureDate,
+  isValidName,
+  isValidTime,
+  isValidWhatsapp,
+} from "@/lib/booking-validation";
 
 export async function getAvailableSlots(
   serviceId: string,
@@ -101,14 +93,14 @@ export async function createAppointment(
   const whatsapp = input.whatsapp.trim();
   const notes = input.notes?.trim() || undefined;
 
-  if (!name) return { ok: false, error: "Informe seu nome." };
-  if (whatsapp.replace(/\D/g, "").length < 10) {
+  if (!isValidName(name)) return { ok: false, error: "Informe seu nome." };
+  if (!isValidWhatsapp(whatsapp)) {
     return { ok: false, error: "Informe um WhatsApp válido com DDD." };
   }
   if (!isValidFutureDate(input.dateISO)) {
     return { ok: false, error: "Data inválida." };
   }
-  if (!/^\d{2}:\d{2}$/.test(input.time)) {
+  if (!isValidTime(input.time)) {
     return { ok: false, error: "Horário inválido." };
   }
 
