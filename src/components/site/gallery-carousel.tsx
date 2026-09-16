@@ -30,6 +30,11 @@ function pad(n: number) {
 export function GalleryCarousel({ photos }: GalleryCarouselProps) {
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  // Pausa manual (botão) e por foco de teclado, separada do hover/touch
+  // (`isPaused`) — sem isso o autoplay de 5s só parava com mouse/toque,
+  // falhando WCAG 2.2.2 (Pause/Stop/Hide) pra quem navega por teclado ou
+  // leitor de tela (ver auditoria Impeccable, 2026-09-16).
+  const [userPaused, setUserPaused] = useState(false);
   const reduceMotion = useReducedMotion();
   const touchStartX = useRef(0);
   const resumeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,12 +47,12 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
   }
 
   useEffect(() => {
-    if (isPaused || !canNavigate) return undefined;
+    if (isPaused || userPaused || !canNavigate) return undefined;
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % total);
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [isPaused, canNavigate, total, index]);
+  }, [isPaused, userPaused, canNavigate, total, index]);
 
   useEffect(() => {
     return () => {
@@ -84,6 +89,8 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
         className="relative aspect-square touch-pan-y border border-brand-red/70 bg-brand-ink p-2"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -147,6 +154,23 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
             <span className="font-label text-[11px] tabular-nums text-brand-smoke">
               {pad(index + 1)} / {pad(total)}
             </span>
+          )}
+          {canNavigate && (
+            <button
+              type="button"
+              onClick={() => setUserPaused((p) => !p)}
+              aria-pressed={userPaused}
+              aria-label={
+                userPaused
+                  ? "Retomar troca automática de fotos"
+                  : "Pausar troca automática de fotos"
+              }
+              className="mt-0.5 text-brand-smoke transition-colors hover:text-brand-red"
+            >
+              <span aria-hidden="true" className="text-xs">
+                {userPaused ? "▶" : "❚❚"}
+              </span>
+            </button>
           )}
         </div>
 

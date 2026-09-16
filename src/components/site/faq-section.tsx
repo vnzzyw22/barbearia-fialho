@@ -10,8 +10,17 @@ export function FaqSection() {
       <div className="mx-auto max-w-3xl px-6 py-14 sm:py-24">
         <Reveal>
           <div className="flex flex-col items-start gap-4 text-left">
-            <h2 className="font-display text-4xl leading-none font-bold tracking-tight uppercase sm:text-5xl lg:text-6xl">
-              <span className="text-brand-cream">Perguntas</span>{" "}
+            {/* font-black + contorno na 1ª palavra: alinhado à mesma
+                gramática visual das outras seções (Sobre/Serviços/Equipe/
+                Galeria) — antes usava font-bold sem contorno, destoando
+                sem motivo aparente (ver auditoria Impeccable, 2026-09-16). */}
+            <h2 className="font-display text-4xl leading-none font-black tracking-tight uppercase sm:text-5xl lg:text-6xl">
+              <span
+                className="text-transparent"
+                style={{ WebkitTextStroke: "1.5px var(--color-brand-cream)" }}
+              >
+                Perguntas
+              </span>{" "}
               <span className="text-brand-red">Frequentes</span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />

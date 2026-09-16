@@ -15,14 +15,18 @@ export function TeamSection({ staff }: TeamSectionProps) {
       <div className="mx-auto max-w-5xl px-6 py-14 sm:py-24 lg:max-w-6xl">
         <Reveal>
           <div className="flex flex-col items-center gap-4">
+            {/* Tratamento invertido em relação a Serviços/Galeria (contorno
+                na segunda palavra, não na primeira) — variação deliberada
+                pra não repetir a mesma fórmula em 3 seções seguidas (ver
+                auditoria Impeccable, 2026-09-16). */}
             <h2 className="text-center font-display text-4xl leading-none font-black tracking-tight uppercase sm:text-5xl lg:text-6xl">
+              <span className="text-brand-red">Nossa</span>{" "}
               <span
                 className="text-transparent"
                 style={{ WebkitTextStroke: "1.5px var(--color-brand-cream)" }}
               >
-                Nossa
-              </span>{" "}
-              <span className="text-brand-red">Equipe</span>
+                Equipe
+              </span>
             </h2>
             <span aria-hidden="true" className="h-px w-16 bg-brand-red/60" />
           </div>

@@ -33,9 +33,16 @@ export default async function AgendarPage(props: PageProps<"/agendar">) {
           >
             Agende <span className="text-brand-red">seu horário</span>
           </h1>
+          {/* Reasseguração explícita logo na primeira tela do fluxo — antes
+              a única frase que deixava claro que o pedido fica PENDENTE até
+              confirmação (não confirmado na hora) estava isolada na FAQ da
+              home, longe de quem chega direto nesta página pelo botão
+              "Agendar horário" (ver auditoria Impeccable, 2026-09-16).
+              Texto alinhado com a resposta da FAQ (faq-accordion.tsx). */}
           <p className="mt-3 text-sm text-brand-smoke">
-            Escolha o serviço, o profissional, a data e o horário. Depois de
-            enviado, você recebe a confirmação pelo WhatsApp.
+            Escolha o serviço, o profissional, a data e o horário. Seu pedido
+            fica pendente até a confirmação da barbearia, enviada pelo
+            WhatsApp informado no agendamento.
           </p>
         </div>
 
