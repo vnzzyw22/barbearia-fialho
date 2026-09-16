@@ -8,9 +8,10 @@ construído originalmente para o **Lkas Locs** e reaproveitado pelo
 **Tesouras Club Barbearia** — código clonado localmente a partir do
 Tesouras Club (`Projects/Tesouras-Club-Barbearia`) em 2026-09-14 (robocopy
 + `git init` novo, histórico de commits não herdado). Repositório GitHub
-próprio conectado (`github.com/vnzzyw22/barbearia-fialho.git`) — projeto
-Supabase adiado a pedido da cliente (ver Pendências), Vercel ainda não
-criado.
+próprio conectado (`github.com/vnzzyw22/barbearia-fialho.git`), projeto
+Vercel no ar (`barbearia-fialho.vercel.app`) e projeto Supabase próprio da
+Fialho criado, migrado e populado com dados reais (2026-09-16) — projeto
+100% em produção com banco real, sem pendências de infraestrutura.
 
 ## Decisões confirmadas
 
@@ -19,10 +20,8 @@ criado.
   `business_id` nas tabelas. A Fialho precisa do **seu próprio** projeto
   Supabase, não reaproveitar o do Tesouras Club ou do Lkas Locs.
 - **Gerenciador de pacotes:** npm (herdado).
-- **Git/deploy:** git local inicializado nesta sessão. Pendências: projeto
-  Supabase próprio + migrations aplicadas, repositório GitHub próprio,
-  projeto Vercel próprio — todos passos manuais/interativos, fora do
-  alcance do agente (ver "Pendências" abaixo).
+- **Git/deploy:** GitHub + Vercel + Supabase próprios, todos criados e
+  configurados (ver "Pendências" abaixo pro histórico de cada um).
 - **Stack:** Next.js 16 (App Router, TypeScript) + Tailwind CSS v4 +
   Supabase (Postgres/Auth/Storage) + Vercel. Painel administrativo com
   tokens de estilo próprios (`src/components/admin/theme.ts`). Animações:
@@ -128,25 +127,18 @@ interativo no navegador)
 - [x] **Env vars do Supabase configuradas na Vercel em 2026-09-16**
   (Production/Preview/Development, via `vercel env add`) — projeto ligado
   com `vercel link`. Deploy `e641d75` já saiu com elas.
-- [ ] **Aplicar `supabase/migrations/*.sql` + `supabase/seed.sql`** —
-  ainda não aplicado no banco novo (sem token de acesso ao CLI/senha do
-  banco disponível aqui, então não dá pra rodar `supabase db push` a
-  partir do agente). Script combinado com as 6 migrations + seed, na
-  ordem certa, deixado em
-  `%LOCALAPPDATA%\Temp\claude\...\scratchpad\fialho-supabase-setup.sql`
-  (ver mensagem da sessão de 2026-09-16 pro caminho exato) — passo da
-  cliente: colar no SQL Editor do painel (Project pgoleccfvulckagvmgbr →
-  SQL Editor → New query → colar → Run) e rodar uma vez só.
-  **Atenção:** como as env vars da Vercel já apontam pro Supabase real
-  (item acima), o site em produção já parou de usar
-  `local-fallback-data.ts` e está mostrando serviços/equipe/galeria
-  vazios até essa migration ser aplicada (sem crash — todo `queries.ts`
-  trata erro/tabela ausente retornando vazio, só fica com menos conteúdo
-  até lá).
-- [ ] Criar usuário admin (Authentication → Add user, no projeto
-  Supabase) — sugestão: `vbcs2009@gmail.com` (mesmo e-mail usado no
-  Tesouras Club). Não dá pra criar isso pelo agente sem uma service role
-  key (Admin API exige ela); é a cliente quem precisa criar pelo painel.
+- [x] **`supabase/migrations/*.sql` + `supabase/seed.sql` aplicados em
+  2026-09-16** — a cliente colou o script combinado no SQL Editor do
+  painel. Confirmado via REST público (anon key) que `business_settings`,
+  `services` (8), `staff` (4, sem Allyson) e `gallery_photos` (6) estão
+  todos populados corretamente em produção.
+- [x] **Usuário admin criado em 2026-09-16** — `fialho@gmail.com`
+  (senha definida pela cliente). Criado pelo agente via endpoint público
+  `/auth/v1/signup` (não precisa de service role, é o mesmo fluxo de
+  autocadastro). Exigia confirmação de e-mail por padrão do projeto — sem
+  service role pra confirmar via Admin API, a cliente rodou
+  `update auth.users set email_confirmed_at = now() where email = '...'`
+  no SQL Editor. Login testado e confirmado funcionando no `/admin`.
 - [x] **Projeto Vercel criado e no ar** (2026-09-15) — a cliente confirmou.
 
 ### Vídeo da Hero ainda não aparece pra cliente (em aberto, 2026-09-15)
