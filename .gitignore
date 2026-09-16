@@ -46,3 +46,6 @@ supabase/.temp
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Script de setup manual do Supabase (temporario, sem segredo - so DDL/seed)
+RODAR-NO-SUPABASE.sql
