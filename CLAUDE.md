@@ -113,24 +113,41 @@ Tesouras Club Barbearia) e valem pra qualquer clone deste template:
 interativo no navegador)
 - [x] **Repositório GitHub conectado** (2026-09-15):
   `github.com/vnzzyw22/barbearia-fialho.git`, branch `main`.
-- [ ] Criar projeto Supabase próprio da Fialho — **adiado a pedido da
-  cliente** (2026-09-15), não é bloqueante pro trabalho de design/conteúdo.
-  Ver "Modo de pré-visualização sem Supabase" abaixo pro que já funciona
-  sem ele. Quando for criar: conta a definir (ver nota sobre limite de 2
-  projetos gratuitos por pessoa/organização, registrada no histórico do
-  Tesouras Club).
-- [ ] Aplicar `supabase/migrations/*.sql` + `supabase/seed.sql` (via SQL
-  Editor do painel ou `supabase db push`, dependendo do que o login do CLI
-  permitir).
-- [ ] Preencher `.env.local` (copiar de `.env.local.example`) com
-  `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`/
-  `SUPABASE_SERVICE_ROLE_KEY`.
-- [ ] Criar usuário admin (Authentication → Add user) — sugestão:
-  `vbcs2009@gmail.com` (mesmo e-mail usado no Tesouras Club), a confirmar.
+- [x] **Projeto Supabase próprio criado pela cliente em 2026-09-16**:
+  `pgoleccfvulckagvmgbr` (`https://pgoleccfvulckagvmgbr.supabase.co`).
+  Chave fornecida foi a nova `sb_publishable_...` (formato novo do
+  Supabase que substitui a antiga anon key JWT) — confirmado que
+  `@supabase/supabase-js@^2.112.4` (versão já usada aqui) aceita esse
+  formato direto no lugar da anon key, sem mudança de código.
+- [x] **`.env.local` preenchido em 2026-09-16** com
+  `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY` reais.
+  `SUPABASE_SERVICE_ROLE_KEY` deixada em branco de propósito — não é
+  usada em nenhum lugar do código (`grep` confirmou): o painel /admin
+  autoriza por `auth.uid() is not null` via RLS (ver
+  `src/lib/supabase/proxy.ts`), não por uma chave de service role.
+- [x] **Env vars do Supabase configuradas na Vercel em 2026-09-16**
+  (Production/Preview/Development, via `vercel env add`) — projeto ligado
+  com `vercel link`. Deploy `e641d75` já saiu com elas.
+- [ ] **Aplicar `supabase/migrations/*.sql` + `supabase/seed.sql`** —
+  ainda não aplicado no banco novo (sem token de acesso ao CLI/senha do
+  banco disponível aqui, então não dá pra rodar `supabase db push` a
+  partir do agente). Script combinado com as 6 migrations + seed, na
+  ordem certa, deixado em
+  `%LOCALAPPDATA%\Temp\claude\...\scratchpad\fialho-supabase-setup.sql`
+  (ver mensagem da sessão de 2026-09-16 pro caminho exato) — passo da
+  cliente: colar no SQL Editor do painel (Project pgoleccfvulckagvmgbr →
+  SQL Editor → New query → colar → Run) e rodar uma vez só.
+  **Atenção:** como as env vars da Vercel já apontam pro Supabase real
+  (item acima), o site em produção já parou de usar
+  `local-fallback-data.ts` e está mostrando serviços/equipe/galeria
+  vazios até essa migration ser aplicada (sem crash — todo `queries.ts`
+  trata erro/tabela ausente retornando vazio, só fica com menos conteúdo
+  até lá).
+- [ ] Criar usuário admin (Authentication → Add user, no projeto
+  Supabase) — sugestão: `vbcs2009@gmail.com` (mesmo e-mail usado no
+  Tesouras Club). Não dá pra criar isso pelo agente sem uma service role
+  key (Admin API exige ela); é a cliente quem precisa criar pelo painel.
 - [x] **Projeto Vercel criado e no ar** (2026-09-15) — a cliente confirmou.
-  Não sei se as env vars do Supabase foram configuradas lá (perguntar se
-  o Supabase real já está ligado em produção ou se o site ainda roda no
-  modo de pré-visualização também na Vercel).
 
 ### Vídeo da Hero ainda não aparece pra cliente (em aberto, 2026-09-15)
 Depois de duas rodadas de investigação (fix do matcher do proxy, camada de
