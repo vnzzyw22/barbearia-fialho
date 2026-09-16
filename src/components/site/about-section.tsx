@@ -12,7 +12,7 @@ interface AboutSectionProps {
 // git log), aqui já é a logo de verdade da Fialho, então faz sentido
 // reintroduzir o tratamento: "é a seção que fala sobre ela, então cabe
 // aparecer a logo". Moldura em cobre reaproveita a mesma assinatura visual
-// da Galeria (`border-brand-red`, ver gallery-carousel.tsx) em vez de um
+// da Galeria (`border-brand-red`, ver gallery-orbit.tsx) em vez de um
 // selo giratório com texto ao redor — aquele efeito era uma composição
 // específica de outro projeto, não uma assinatura visual desta marca.
 //
@@ -52,17 +52,21 @@ export function AboutSection({ staffCount, servicesCount }: AboutSectionProps) {
           delay={0.1}
           className="flex flex-col gap-6 border-brand-cream/15 lg:col-span-6 lg:col-start-7 lg:border-l lg:pl-10"
         >
-          {/* TODO(conteúdo real): copy provisória — a Fialho ainda não
-              passou a história/tom de voz da marca (ver CLAUDE.md >
-              Pendências). Texto curto e neutro de propósito, pra não soar
-              como copy final escrita sem input do cliente. */}
-          <p className="max-w-md font-display text-xl font-medium text-brand-cream/90 italic sm:text-2xl">
+          <p className="max-w-lg font-display text-xl font-medium text-brand-cream/90 italic sm:text-2xl">
             Cabelo, barba e bigode como tem que ser.
           </p>
-          <p className="max-w-md font-light text-brand-smoke">
-            A Fialho Barbearia atende na Avenida Brasil, em Maringá — corte,
-            barba e bigode com o cuidado de quem trabalha com navalha e
-            tesoura todos os dias.
+          <p className="max-w-lg font-light text-brand-smoke">
+            A Fialho Barbearia fica na Avenida Brasil, em Maringá, e recebe
+            cada cliente como se fosse o único da cadeira do dia. Navalha,
+            tesoura e máquina são ferramentas de ofício, não de pressa — cada
+            corte é pensado a partir do que o cliente pede e do que o rosto
+            dele pede de volta.
+          </p>
+          <p className="max-w-lg font-light text-brand-smoke">
+            É um trabalho de time: cada barbeiro tem o próprio estilo e a
+            própria cadeira, mas todos seguem o mesmo padrão de cuidado, da
+            recepção ao acabamento final. Não existe corte rápido demais pra
+            ser feito direito.
           </p>
         </Reveal>
       </div>

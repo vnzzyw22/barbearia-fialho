@@ -70,9 +70,10 @@ não é um mesmo visual reaproveitado.
   Tintura) são dados REAIS, recebidos da cliente em 2026-09-15 — não mais
   exemplo de mercado. 100% editáveis pelo painel, nunca hardcoded.
 - Vários profissionais por deployment — nomes reais recebidos em
-  2026-09-15 (Allyson, Elano, Gótico, Jean, John Fialho), cada um com a
-  própria agenda; agendamento exige escolher um. Ainda sem foto/função
-  individual (cliente avisou que fotos vêm depois).
+  2026-09-15 (Elano, Gótico, Jean, John Fialho; Allyson removido pela
+  cliente em 2026-09-16, não faz parte da equipe), cada um com a própria
+  agenda; agendamento exige escolher um. Fotos de Gótico e John Fialho
+  recebidas em 2026-09-16; Elano e Jean ainda sem foto/função individual.
 - Fuso fixo `America/Sao_Paulo` (sem horário de verão no Brasil desde 2019).
 
 ## Brand Commitments

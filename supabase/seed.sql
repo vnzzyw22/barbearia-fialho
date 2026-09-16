@@ -35,15 +35,15 @@ insert into public.services (name, description, price, duration_minutes, display
   ('Selagem Capilar',      null,            150.00,  90, 7),
   ('Tintura',              'A partir de',     50.00,  30, 8);
 
--- Equipe real (passada pela cliente em 2026-09-15) — sem foto ainda
--- ("depois vou adicionar fotos deles"). Sem função/especialidade
--- individual informada, por isso "Barbeiro" genérico pra todos.
-insert into public.staff (name, role, display_order) values
-  ('Allyson',     'Barbeiro', 1),
-  ('Elano',       'Barbeiro', 2),
-  ('Gótico',      'Barbeiro', 3),
-  ('Jean',        'Barbeiro', 4),
-  ('John Fialho', 'Barbeiro', 5);
+-- Equipe real (passada pela cliente em 2026-09-15; Allyson removido e
+-- fotos de Gótico/John Fialho recebidas em 2026-09-16 — ver
+-- public/imagens/equipe/). Sem função/especialidade individual informada,
+-- por isso "Barbeiro" genérico pra todos.
+insert into public.staff (name, role, photo_url, display_order) values
+  ('Elano',       'Barbeiro', null,                          1),
+  ('Gótico',      'Barbeiro', '/imagens/equipe/gotico.jpg',      2),
+  ('Jean',        'Barbeiro', null,                          3),
+  ('John Fialho', 'Barbeiro', '/imagens/equipe/john-fialho.jpg', 4);
 
 -- Fotos REAIS da Fialho (recebidas em 2026-09-14, direto na pasta do
 -- projeto — ver public/imagens/galeria/). Servidas como arquivo estático

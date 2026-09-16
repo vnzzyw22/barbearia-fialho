@@ -33,12 +33,12 @@ export default async function Home() {
       <main id="conteudo" className="flex flex-1 flex-col">
         <Hero />
         <div aria-hidden="true" className="signature-divider" />
-        <AboutSection staffCount={staff.length} servicesCount={services.length} />
-        <div aria-hidden="true" className="signature-divider" />
         <ServicesSection services={services} />
         <TeamSection staff={staff} />
         <div aria-hidden="true" className="signature-divider" />
         <GallerySection photos={galleryPhotos} />
+        <AboutSection staffCount={staff.length} servicesCount={services.length} />
+        <div aria-hidden="true" className="signature-divider" />
         <FaqSection />
         <ContactSection business={business} />
       </main>

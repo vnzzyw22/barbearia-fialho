@@ -1,4 +1,4 @@
-import { GalleryCarousel } from "./gallery-carousel";
+import { GalleryOrbit } from "./gallery-orbit";
 import { Reveal } from "./reveal";
 import type { GalleryPhoto } from "@/lib/supabase/types";
 
@@ -34,7 +34,7 @@ export function GallerySection({ photos }: GallerySectionProps) {
             Fotos em breve.
           </p>
         ) : (
-          <GalleryCarousel photos={photos} />
+          <GalleryOrbit photos={photos} />
         )}
       </div>
     </section>

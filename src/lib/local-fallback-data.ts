@@ -37,11 +37,10 @@ export const FALLBACK_SERVICES: Service[] = [
 ];
 
 export const FALLBACK_STAFF: Staff[] = [
-  { id: "fallback-staff-1", name: "Allyson", role: "Barbeiro", photo_url: null, instagram: null },
   { id: "fallback-staff-2", name: "Elano", role: "Barbeiro", photo_url: null, instagram: null },
-  { id: "fallback-staff-3", name: "Gótico", role: "Barbeiro", photo_url: null, instagram: null },
+  { id: "fallback-staff-3", name: "Gótico", role: "Barbeiro", photo_url: "/imagens/equipe/gotico.jpg", instagram: null },
   { id: "fallback-staff-4", name: "Jean", role: "Barbeiro", photo_url: null, instagram: null },
-  { id: "fallback-staff-5", name: "John Fialho", role: "Barbeiro", photo_url: null, instagram: null },
+  { id: "fallback-staff-5", name: "John Fialho", role: "Barbeiro", photo_url: "/imagens/equipe/john-fialho.jpg", instagram: null },
 ];
 
 export const FALLBACK_GALLERY: GalleryPhoto[] = [

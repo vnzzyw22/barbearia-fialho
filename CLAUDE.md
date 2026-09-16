@@ -221,11 +221,23 @@ entre os dois).
 
 ### Conteúdo — dados que o ANEXO pede explicitamente pra não inventar
 - [x] **Nomes reais da equipe recebidos em 2026-09-15**: Allyson, Elano,
-  Gótico, Jean, John Fialho — sem foto ainda ("depois vou adicionar fotos
-  deles", cliente) e sem função/especialidade individual (todos com role
-  genérico "Barbeiro"). Seed em `supabase/seed.sql` e
+  Gótico, Jean, John Fialho — sem função/especialidade individual (todos
+  com role genérico "Barbeiro"). Seed em `supabase/seed.sql` e
   `local-fallback-data.ts`; migration `20260910120000_staff.sql` não seeda
   mais nada (evita duplicar com o seed).
+- [x] **Allyson removido da equipe em 2026-09-16** (cliente: "não tem
+  ele") — não faz mais parte do time, removido de `seed.sql` e
+  `local-fallback-data.ts`.
+- [x] **Fotos de Gótico e John Fialho recebidas em 2026-09-16** — arquivos
+  originais vieram em `public/imagens/Barbeiros/` com acento/maiúscula
+  (`gótico.jpg`, `Jhon-Fialho.jpg`); renomeados pra
+  `public/imagens/equipe/gotico.jpg`/`john-fialho.jpg` (minúsculo, sem
+  acento) por segurança de deploy — Windows é case-insensitive mas a
+  Vercel (Linux) é case-sensitive, então um nome de arquivo com casing
+  diferente do código quebra em produção mesmo funcionando local. **Fotos
+  em baixa resolução (150×150px)** — suficiente pro card quadrado atual da
+  Equipe, mas vale pedir originais em resolução maior se a cliente tiver.
+  Elano e Jean continuam sem foto.
 - [x] **Horário real recebido em 2026-09-15**: seg-sex 09:00-19:30, sáb
   08:00-14:00, domingo fechado (não mencionado pela cliente — tratado como
   fechado, não como "aberto" por omissão).
@@ -239,9 +251,14 @@ entre os dois).
 - [ ] Fotos da equipe — pendente, cliente já avisou que vem depois.
 - [ ] Depoimentos — nenhuma seção de depoimentos existe no site (o template
   nunca teve uma; não foi adicionada aqui sem conteúdo real pra preencher).
-- [ ] Copy da seção "Sobre" e as 6 perguntas do FAQ — placeholder curto e
-  neutro (não inventei uma "história da marca" convincente sem ter
-  informação real — ver TODOs em about-section.tsx/faq-accordion.tsx).
+- [x] **Copy da seção "Sobre" reescrita em 2026-09-16** — a pedido
+  explícito da cliente ("pode criar você mesmo"), texto de filosofia/ofício
+  da casa mais longo (2 parágrafos + frase de destaque), sem inventar
+  fatos verificáveis (datas de fundação, número de clientes etc.). Ver
+  `about-section.tsx`.
+- [ ] As 6 perguntas do FAQ — placeholder curto e neutro (não inventei
+  perguntas/respostas reais sem informação da cliente — ver TODOs em
+  `faq-accordion.tsx`).
 
 ### Motion (ver ANEXO seção 5) — o que ficou pra depois
 Implementado nesta sessão: curva de easing única (`src/lib/motion.ts` +
