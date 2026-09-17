@@ -6,6 +6,7 @@ import {
   getAppointmentsForRange,
   getBlockedSlotsForRange,
 } from "@/lib/supabase/admin-queries";
+import { getActiveServices } from "@/lib/supabase/queries";
 
 // Início da semana (domingo) que contém `dateISO` — mesmo padrão de
 // aritmética de data em hora local já usado no projeto (ver `shiftDate`
@@ -35,10 +36,11 @@ export default async function AgendaPage(props: PageProps<"/admin/agenda">) {
   const rangeStartISO = `${weekStartISO}T00:00:00-03:00`;
   const rangeEndISO = `${weekEndISO}T23:59:59-03:00`;
 
-  const [appointments, blockedSlots, staff] = await Promise.all([
+  const [appointments, blockedSlots, staff, services] = await Promise.all([
     getAppointmentsForRange(rangeStartISO, rangeEndISO),
     getBlockedSlotsForRange(rangeStartISO, rangeEndISO),
     getAllStaff(),
+    getActiveServices(),
   ]);
 
   return (
@@ -54,6 +56,7 @@ export default async function AgendaPage(props: PageProps<"/admin/agenda">) {
         appointments={appointments}
         blockedSlots={blockedSlots}
         staff={staff}
+        services={services}
       />
     </div>
   );

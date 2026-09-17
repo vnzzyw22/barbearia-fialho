@@ -68,6 +68,12 @@ interface CreateAppointmentInput {
   name: string;
   whatsapp: string;
   notes?: string;
+  // Omitido (fluxo público) = "pending", aguardando confirmação da loja.
+  // Usado com "confirmed" pelo painel admin (ver
+  // admin/agenda/actions.ts#createManualAppointment), já que quem está
+  // criando ali é a própria barbearia — não faz sentido esperar ela
+  // "confirmar" um agendamento que ela mesma lançou.
+  status?: "pending" | "confirmed";
 }
 
 type CreateAppointmentResult =
@@ -144,7 +150,7 @@ export async function createAppointment(
       staff_id: staffMember.id,
       starts_at: startsAt,
       ends_at: endsAt,
-      status: "pending",
+      status: input.status ?? "pending",
       notes: notes ?? null,
     });
 

@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAvailableSlots } from "@/app/agendar/actions";
 import {
   createBlockedSlot,
+  createManualAppointment,
   deleteBlockedSlot,
   updateAppointmentStatus,
 } from "@/app/admin/(painel)/agenda/actions";
@@ -14,6 +16,7 @@ import {
   fieldClass,
   filterButtonClass,
   labelClass,
+  sectionTitleClass,
 } from "@/components/admin/theme";
 import { formatPrice } from "@/lib/format";
 import { getWhatsappLink } from "@/lib/whatsapp";
@@ -23,6 +26,7 @@ import type {
   AdminBlockedSlot,
   AdminStaff,
   AppointmentStatus,
+  Service,
 } from "@/lib/supabase/types";
 
 interface AgendaWeekViewProps {
@@ -31,6 +35,7 @@ interface AgendaWeekViewProps {
   appointments: AdminAppointment[];
   blockedSlots: AdminBlockedSlot[];
   staff: AdminStaff[];
+  services: Service[];
 }
 
 type Selection =
@@ -79,12 +84,15 @@ function dayNumberLabel(dateISO: string) {
   }).format(new Date(`${dateISO}T00:00:00`));
 }
 
+const activeStaff = (staff: AdminStaff[]) => staff.filter((s) => s.active);
+
 export function AgendaWeekView({
   weekStartISO,
   isCurrentWeek,
   appointments,
   blockedSlots,
   staff,
+  services,
 }: AgendaWeekViewProps) {
   const router = useRouter();
   const [selection, setSelection] = useState<Selection>(null);
@@ -99,6 +107,47 @@ export function AgendaWeekView({
   const [blockStaffId, setBlockStaffId] = useState<string>("");
   const [blockSubmitting, setBlockSubmitting] = useState(false);
   const [blockError, setBlockError] = useState<string | null>(null);
+
+  // Novo agendamento lançado direto pela barbearia (walk-in, telefone, ou
+  // pra popular a agenda com exemplos) — mesmo fluxo/validação do
+  // agendamento público (ver createManualAppointment), só que já nasce
+  // confirmado e pode ser preenchido pela própria dona sem o cliente
+  // precisar acessar o site.
+  const [apptDate, setApptDate] = useState<string | null>(null);
+  const [apptServiceId, setApptServiceId] = useState("");
+  const [apptStaffId, setApptStaffId] = useState("");
+  const [apptTime, setApptTime] = useState<string | null>(null);
+  const [apptName, setApptName] = useState("");
+  const [apptWhatsapp, setApptWhatsapp] = useState("");
+  const [apptNotes, setApptNotes] = useState("");
+  const [apptSlots, setApptSlots] = useState<string[] | null>(null);
+  const [apptSlotsLoading, setApptSlotsLoading] = useState(false);
+  const [apptSlotsError, setApptSlotsError] = useState<string | null>(null);
+  const [apptSubmitting, setApptSubmitting] = useState(false);
+  const [apptError, setApptError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!apptDate || !apptServiceId || !apptStaffId) {
+      setApptSlots(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setApptTime(null);
+    setApptSlotsLoading(true);
+    setApptSlotsError(null);
+
+    getAvailableSlots(apptServiceId, apptStaffId, apptDate).then((result) => {
+      if (cancelled) return;
+      setApptSlotsLoading(false);
+      if ("error" in result) setApptSlotsError(result.error);
+      else setApptSlots(result.slots);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [apptDate, apptServiceId, apptStaffId]);
 
   const filteredAppointments = staffFilter
     ? appointments.filter((a) => a.staff?.id === staffFilter)
@@ -132,9 +181,27 @@ export function AgendaWeekView({
 
   function openBlockForm(dateISO: string) {
     setSelection(null);
+    setApptDate(null);
     setBlockDate(dateISO);
     setBlockStaffId(staffFilter ?? "");
     setBlockError(null);
+  }
+
+  function openAppointmentForm(dateISO: string) {
+    setSelection(null);
+    setBlockDate(null);
+    setApptDate(dateISO);
+    setApptServiceId("");
+    setApptStaffId(staffFilter ?? "");
+    setApptTime(null);
+    setApptName("");
+    setApptWhatsapp("");
+    setApptNotes("");
+    setApptError(null);
+  }
+
+  function closeAppointmentForm() {
+    setApptDate(null);
   }
 
   async function handleStatusChange(id: string, status: AppointmentStatus) {
@@ -173,6 +240,33 @@ export function AgendaWeekView({
       router.refresh();
     } else {
       setBlockError(result.error);
+    }
+  }
+
+  async function handleCreateAppointment(e: React.FormEvent) {
+    e.preventDefault();
+    if (!apptDate || !apptServiceId || !apptStaffId || !apptTime) return;
+
+    setApptSubmitting(true);
+    setApptError(null);
+
+    const result = await createManualAppointment({
+      serviceId: apptServiceId,
+      staffId: apptStaffId,
+      dateISO: apptDate,
+      time: apptTime,
+      name: apptName,
+      whatsapp: apptWhatsapp,
+      notes: apptNotes,
+    });
+
+    setApptSubmitting(false);
+
+    if (result.ok) {
+      setApptDate(null);
+      router.refresh();
+    } else {
+      setApptError(result.error);
     }
   }
 
@@ -308,13 +402,22 @@ export function AgendaWeekView({
               })}
             </div>
 
-            <button
-              type="button"
-              onClick={() => openBlockForm(day.dateISO)}
-              className="mt-auto self-start font-nav text-[11px] font-bold tracking-widest text-white/30 uppercase transition-colors duration-150 hover:text-brand-red"
-            >
-              + Bloquear
-            </button>
+            <div className="mt-auto flex flex-col items-start gap-1">
+              <button
+                type="button"
+                onClick={() => openAppointmentForm(day.dateISO)}
+                className="font-nav text-[11px] font-bold tracking-widest text-brand-red uppercase transition-colors duration-150 hover:text-white"
+              >
+                + Agendar
+              </button>
+              <button
+                type="button"
+                onClick={() => openBlockForm(day.dateISO)}
+                className="font-nav text-[11px] font-bold tracking-widest text-white/30 uppercase transition-colors duration-150 hover:text-brand-red"
+              >
+                + Bloquear
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -426,6 +529,140 @@ export function AgendaWeekView({
             </button>
           </div>
         </div>
+      )}
+
+      {apptDate && (
+        <form
+          onSubmit={handleCreateAppointment}
+          className={`flex flex-col gap-4 ${cardClass}`}
+        >
+          <p className={sectionTitleClass}>
+            Novo agendamento — {dayNumberLabel(apptDate)}
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+              <label className={labelClass}>Serviço</label>
+              <select
+                value={apptServiceId}
+                onChange={(e) => setApptServiceId(e.target.value)}
+                className={fieldClass}
+              >
+                <option value="">Selecione</option>
+                {services.map((service) => (
+                  <option key={service.id} value={service.id}>
+                    {service.name} — {formatPrice(service.price)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+              <label className={labelClass}>Profissional</label>
+              <select
+                value={apptStaffId}
+                onChange={(e) => setApptStaffId(e.target.value)}
+                className={fieldClass}
+              >
+                <option value="">Selecione</option>
+                {activeStaff(staff).map((person) => (
+                  <option key={person.id} value={person.id}>
+                    {person.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex min-w-40 flex-col gap-1.5">
+              <label className={labelClass}>Data</label>
+              <input
+                type="date"
+                value={apptDate}
+                onChange={(e) => setApptDate(e.target.value)}
+                className={fieldClass}
+              />
+            </div>
+          </div>
+
+          {apptServiceId && apptStaffId && (
+            <div className="flex flex-col gap-1.5">
+              <label className={labelClass}>Horário</label>
+              {apptSlotsLoading && (
+                <p className="text-sm text-white/50">Carregando horários...</p>
+              )}
+              {apptSlotsError && (
+                <p className="text-sm text-red-400">{apptSlotsError}</p>
+              )}
+              {apptSlots && apptSlots.length === 0 && (
+                <p className="text-sm text-white/50">
+                  Nenhum horário disponível nessa data.
+                </p>
+              )}
+              {apptSlots && apptSlots.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {apptSlots.map((slot) => (
+                    <button
+                      key={slot}
+                      type="button"
+                      onClick={() => setApptTime(slot)}
+                      className={filterButtonClass(apptTime === slot)}
+                    >
+                      {slot}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+              <label className={labelClass}>Nome do cliente</label>
+              <input
+                type="text"
+                value={apptName}
+                onChange={(e) => setApptName(e.target.value)}
+                className={fieldClass}
+              />
+            </div>
+            <div className="flex min-w-48 flex-1 flex-col gap-1.5">
+              <label className={labelClass}>WhatsApp (com DDD)</label>
+              <input
+                type="tel"
+                placeholder="(44) 90000-0000"
+                value={apptWhatsapp}
+                onChange={(e) => setApptWhatsapp(e.target.value)}
+                className={`${fieldClass} placeholder:text-white/30`}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className={labelClass}>Observação (opcional)</label>
+            <input
+              type="text"
+              value={apptNotes}
+              onChange={(e) => setApptNotes(e.target.value)}
+              className={fieldClass}
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              disabled={apptSubmitting || !apptTime}
+              className={buttonPrimaryClass}
+            >
+              {apptSubmitting ? "Salvando..." : "Salvar agendamento"}
+            </button>
+            <button
+              type="button"
+              onClick={closeAppointmentForm}
+              className="font-nav text-xs font-bold tracking-widest text-white/40 uppercase hover:text-white"
+            >
+              Cancelar
+            </button>
+            {apptError && <p className="w-full text-sm text-red-400">{apptError}</p>}
+          </div>
+        </form>
       )}
 
       {blockDate && (

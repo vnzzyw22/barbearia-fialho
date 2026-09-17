@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { createAppointment } from "@/app/agendar/actions";
 import { createClient } from "@/lib/supabase/server";
 import type { AppointmentStatus } from "@/lib/supabase/types";
 
@@ -9,6 +10,33 @@ type ActionResult = { ok: true } | { ok: false; error: string };
 function revalidateAgenda() {
   revalidatePath("/admin/agenda");
   revalidatePath("/agendar");
+}
+
+interface CreateManualAppointmentInput {
+  serviceId: string;
+  staffId: string;
+  dateISO: string;
+  time: string;
+  name: string;
+  whatsapp: string;
+  notes?: string;
+}
+
+// Agendamento lançado pela própria barbearia (walk-in, telefone, ou pra
+// popular a agenda com exemplos) — reaproveita literalmente a mesma
+// validação/criação do fluxo público (`createAppointment`, mesmas regras
+// de conflito de horário, mesmo formato de dado), só que já nasce
+// "confirmed" em vez de "pending" (ver nota no tipo `CreateAppointmentInput`
+// em agendar/actions.ts).
+export async function createManualAppointment(
+  input: CreateManualAppointmentInput,
+): Promise<ActionResult> {
+  const result = await createAppointment({ ...input, status: "confirmed" });
+
+  if (!result.ok) return result;
+
+  revalidateAgenda();
+  return { ok: true };
 }
 
 export async function updateAppointmentStatus(
