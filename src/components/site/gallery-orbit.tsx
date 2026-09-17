@@ -43,8 +43,8 @@ function useOrbitGeometry() {
         width: 300,
         height: 400,
         perspective: 1600,
-        previewScale: 1.22,
-        previewZ: 70,
+        previewScale: 1.7,
+        previewZ: 170,
       }
     : {
         isDesktop,
@@ -55,8 +55,8 @@ function useOrbitGeometry() {
         width: 178,
         height: 237,
         perspective: 1000,
-        previewScale: 1.2,
-        previewZ: 45,
+        previewScale: 1.55,
+        previewZ: 95,
       };
 }
 
