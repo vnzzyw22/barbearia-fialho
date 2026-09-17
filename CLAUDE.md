@@ -283,9 +283,13 @@ DESIGN.md > Pendente):
   literal, mas como órbita 3D (`gallery-orbit.tsx`) com giro automático
   contínuo e preview em destaque (fundo desfocado) ao passar mouse/dedo/
   foco sobre qualquer foto. Substituiu o carrossel de uma-foto-por-vez.
-- [ ] Passos do agendamento deslizando horizontalmente com barra de
-  progresso — hoje `booking-form.tsx` revela campos progressivamente num
-  formulário contínuo, não em steps discretos com transição de slide.
+- [x] **Steps do agendamento implementados em 2026-09-16** —
+  `booking-form.tsx` agora usa um reducer (`booking-form-state.ts`) com 3
+  passos (Serviço+Profissional / Data e horário / Seus dados), transição
+  de slide horizontal via Framer Motion, barra de progresso
+  (`step-progress.tsx`) e botão Voltar preservando os dados já
+  preenchidos. Validação por passo extraída pra `src/lib/booking-validation.ts`
+  (reaproveitada também pelo server em `actions.ts`).
 
 ## Equipe de barbeiros (herdado, ver CLAUDE.md do Tesouras Club pro
 histórico original da mudança de schema)
